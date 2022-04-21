@@ -10,15 +10,11 @@ body{
     align-items: center;
 }
 .megagrille{
-    margin: 20px;
-    width: 50%;
 }
 [class^=ligne]{
     display: flex;
-}
-.ligne1{
-}
-.grille1{
+    justify-content: space-around;
+    background-color: 'none';
 }
 [class^=grille]{
     width: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333%;
@@ -30,4 +26,13 @@ body{
     justify-content: center;
     align-items: center;
     border: solid black 1px;
+}
+.separateurhor{
+    width: 100%;
+    height: 3px;
+}
+.separateurvert{
+    height: 100%;
+    width: 3px;
+    background-color: black;
 }
