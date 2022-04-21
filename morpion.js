@@ -1,10 +1,12 @@
-window.addEventListener('resize',function(){
-    const width=document.querySelector('.grille').offsetWidth;
-    console.log(width);
-    document.querySelector('.megagrille').style.setProperty('grid-auto-rows',`${width}px`); 
+const grilles=document.querySelectorAll('[class^="grille"]');
+const cases=document.querySelectorAll('.case');
+
+window.addEventListener('resize', () => {
+    const width = cases[0].offsetWidth;
+    for (var i=0;i<cases.length;i++){grilles[i].style.setProperty('grid-auto-rows', `${width}px`)};  
+
 });
-window.addEventListener('load',function(){
-    const width=document.querySelector('.grille').offsetWidth;
-    console.log(width);
-    document.querySelector('.megagrille').style.setProperty('grid-auto-rows',`${width}px`);
+window.addEventListener('load', () => {
+    const width = cases[0].offsetWidth;
+    for (var i=0;i<cases.length;i++){grilles[i].style.setProperty('grid-auto-rows', `${width}px`)};  
 });

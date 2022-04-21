@@ -6,26 +6,30 @@
 body{
     background-color: lightblue;
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
-div.megagrille{
-    width: 50%;
-    display: grid;
-    grid-template-columns: repeat(3,20%);
-    border: solid black 3px;
+[class^=ligne]{
+    display: flex;
 }
-div.grille1{
+[class^=grille]{
+    width: 20%;
     display: grid;
-    grid-column: 1/3;
-    grid-row:1/3;
-    grid-template-columns: subgrid;
-    grid-template-rows: subgrid;
+    grid-template-columns: repeat(auto-fit, 33.333333333333333333%);
     border: solid black 2px;
-    background-color: red;
 }
-div.case{
+.case {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 1px solid black;
 }
-
+.grille1{
+    background-color: brown;
+}
+.grille2{
+    background-color: pink;
+}
+.grille3{
+    background-color: yellow;
+}
