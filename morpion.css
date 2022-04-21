@@ -1,34 +1,35 @@
-body{
-}
-#gigagrille{
-    display: flex;
-}
-#gigagrille_colonne1, #gigagrille_colonne2, #gigagrille_colonne3{
-    margin: 0px;
+*{
     padding: 0%;
+    margin: 0%;
+    box-sizing: content-box;
 }
-.grille1,.grille2, ETC{
+body{
+    background-color: lightblue;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    padding: 0px;
-    margin: 20px;
+}
+[class^=ligne]{
+    display: flex;
+}
+[class^=grille]{
+    width: 20%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 33.333333333333333333%);
     border: solid black 2px;
 }
-.grille1{
-    background-color: yellow;
-}
-.colonne1{
-    background-color: red;
-}
-.colonne1,.colonne2,.colonne3{
-    margin: 0px;
-    padding: 0%;
-}
-.case{
-    margin: 0%;
-    padding: 0%;
+.case {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid black;
-    width: 50px;
-    height: 50px;
-    background-color: 'none';
+}
+.grille1{
+    background-color: brown;
+}
+.grille2{
+    background-color: pink;
+}
+.grille3{
+    background-color: yellow;
 }
