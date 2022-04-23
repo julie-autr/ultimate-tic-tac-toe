@@ -31,10 +31,22 @@ let noms=[];
 
 var joueuractuel=0;
 
+function manage() {
+    var txt1 = document.getElementsByClassName('name1')[0];
+    var txt2 = document.getElementsByClassName('name2')[0];
+    var bt = document.getElementById('bouton');
+    if (txt1.value != ''&&txt2.value != '') {
+        bt.disabled = false;
+    }
+    else {
+        bt.disabled = true;
+    }
+}
+
 document.getElementById("bouton").addEventListener('click',function(){
     const nom1=document.getElementsByClassName("name1")[0].value;
     const nom2=document.getElementsByClassName("name2")[0].value;
-    document.getElementById("toDelete").style.display('none');
+    document.getElementById("toDelete").style.display='none';
     let nb=Math.random();
     if (nb>0.5){document.getElementsByClassName("quicommence")[0].innerText=`C'est ${nom1} qui commence !`; joueuractuel=1}
     else {document.getElementsByClassName("quicommence")[0].innerText=`C'est ${nom2} qui commence !`;joueuractuel=2};
