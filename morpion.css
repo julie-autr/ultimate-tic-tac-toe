@@ -14,9 +14,6 @@ body{
     justify-content: center;
     align-items: center;
 }
-.megagrille{
-
-}
 [class^=ligne]{
     display: flex;
     justify-content: space-around;
@@ -32,6 +29,7 @@ body{
     justify-content: center;
     align-items: center;
     border: solid black 1px;
+    opacity: 1;
 }
 .separateurhor{
     width: 100%;
@@ -51,4 +49,7 @@ body{
     align-items: center;
     width: 80%;
     text-align: center;
+}
+[class^=grille]:hover{
+    background-color: rgba(220,220,220,0.5);
 }
