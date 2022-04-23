@@ -3,13 +3,20 @@
     margin: 0%;
     box-sizing: border-box;
 }
+@font-face {
+    font-family: 'Raleway';
+    src: url('polices/Raleway-Regular.ttf'); 
+}
 body{
+    font-family: Raleway;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: rgb(255,245,255);
 }
 .megagrille{
+
 }
 [class^=ligne]{
     display: flex;
@@ -17,7 +24,7 @@ body{
     background-color: 'none';
 }
 [class^=grille]{
-    width: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333%;
+    width: 33.3333333333333333333333333333333333333333333333333333333333333333333%;
     display: grid;
     grid-template-columns: repeat(auto-fit, 33.333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333%);
 }
@@ -35,4 +42,14 @@ body{
     height: 100%;
     width: 3px;
     background-color: black;
+}
+[class^=name]{
+    margin: 0px 20px 20px 20px;
+}
+.texte{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    text-align: center;
 }
