@@ -15,10 +15,10 @@
         <div class="separateurhor"></div>
         <div id="toDelete">
             <label >Nom du joueur 1:</label>
-            <input type="text" placeholder="Pierre" id="in1">
+            <input type="text" placeholder="Pierre" id="in1" onkeyup="manage()">
             <label >Nom du joueur 2:</label>
-            <input type="text" placeholder="Paul" id="in2">
-            <button type="button" onclick="getValue();">Valider</button>            
+            <input type="text" placeholder="Paul" id="in2" onkeyup="manage()">
+            <button type="button" onclick="getValue();" disabled id="bouton">Valider</button>            
         </div>
         <div id="quicommence"></div>
     </div>
