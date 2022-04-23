@@ -13,6 +13,7 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: rgb(255,245,255);
 }
 [class^=ligne]{
     display: flex;

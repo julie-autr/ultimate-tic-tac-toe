@@ -26,8 +26,9 @@ window.addEventListener('load', () => {
 };  
 });
 
-const BoutonValider = document.getElementsByClassName("valider");
 let noms=[];
+let joueuractuel=0;
+
 
 var joueuractuel=0;
 
@@ -43,15 +44,6 @@ function manage() {
     }
 }
 
-document.getElementById("bouton").addEventListener('click',function(){
-    const nom1=document.getElementsByClassName("name1")[0].value;
-    const nom2=document.getElementsByClassName("name2")[0].value;
-    document.getElementById("toDelete").style.display='none';
-    let nb=Math.random();
-    if (nb>0.5){document.getElementsByClassName("quicommence")[0].innerText=`C'est ${nom1} qui commence !`; joueuractuel=1}
-    else {document.getElementsByClassName("quicommence")[0].innerText=`C'est ${nom2} qui commence !`;joueuractuel=2};
-}
-);
 
 function griser(i){
     for (var j=0;j<grilles.length;j++){grilles[j].style.backgroundColor="rgba(220,220,220,0.5)"};
@@ -76,4 +68,13 @@ for (var i=0;i<cases.length;i++){
         var indice=Arraygrilles.indexOf(target);
         griser(indice); 
     })
+
+function getValue() {
+    var nom1 = document.getElementById("in1").value;
+    var nom2 = document.getElementById("in2").value;
+    console.log(nom1,nom2); noms.push(nom1); noms.push(nom2);
+    document.getElementById("toDelete").style.display='none';
+    let nb=Math.random();
+    if (nb>0.5){document.getElementById("quicommence").innerText=`C'est ${noms[0]} qui commence !`;joueuractuel=1}
+    else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2}
 };
