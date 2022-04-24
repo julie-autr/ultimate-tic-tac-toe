@@ -3,10 +3,13 @@ const lignes=document.querySelectorAll('[class^="ligne"]');
 const cases=document.querySelectorAll('.case');
 const megagrille=document.querySelector('.megagrille')
 
+// pour vérifier si la méga grille est un multiple de 3 (pour que les sous-grilles soient exactement de la même taille)
 function estMultipleDeTrois(nombre){
     if (Number.isInteger(nombre/3)){return true};
     return false
 }
+
+// pour ajouter dans le css la hauteur des cases au chargement et quand on recadre la page pour que ce soit des carrés responsive
 var bigwidth=2*window.innerWidth/5;
 window.addEventListener('resize', () => {
     bigwidth=2*window.innerWidth/5; console.log(bigwidth);
@@ -30,6 +33,7 @@ let noms=[];
 
 var joueuractuel=0;
 
+// pour que le bouton "Valider" ne soit pas cliquable si les noms ne sont pas renseignés
 function manage() {
     var txt1 = document.getElementById("in1").value;
     var txt2 = document.getElementById("in2").value;
@@ -42,27 +46,7 @@ function manage() {
     }
 };
 
-
-function griser(index){
-    for (var j=0;j<grilles.length;j++){
-        if (j!=index){grilles[j].style.backgroundColor="rgba(220,220,220,0.5)"}
-        else{grilles[j].style.backgroundColor="rgb(255,255,255)"}
-    };
-    
-};
-
-const Arraygrilles=Array.from(grilles);
-
-
-for (var i=0;i<grilles.length;i++){
-    grilles[i].addEventListener('click',function(event){
-        const target = event.target;
-        var parent=target.parentElement;
-        var indice=Arraygrilles.indexOf(parent);
-        console.log(indice)
-        griser(indice); 
-    })
-};
+// pour récupérer les noms des deux joueurs, déterminer qui commence
 function getValue() {
     var nom1 = document.getElementById("in1").value;
     var nom2 = document.getElementById("in2").value;
@@ -73,12 +57,42 @@ function getValue() {
     else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2}
 };
 
-
-for (var i=0;i<cases.length;i++){
-    cases[i].addEventListener('click',function(event){
+// pour griser toutes les cases sauf celle sur laquelle on a cliqué
+function griser(index){
+    for (var j=0;j<grilles.length;j++){
+        if (j!=index){grilles[j].style.backgroundColor="rgba(220,220,220,0.5)"}
+        else{grilles[j].style.backgroundColor="rgb(255,255,255)"}
+    };
+};
+const Arraygrilles=Array.from(grilles);
+for (var i=0;i<grilles.length;i++){
+    grilles[i].addEventListener('click',function(event){
         const target = event.target;
-        var indice=Arraygrilles.indexOf(target);
+        var parent=target.parentElement;
+        var indice=Arraygrilles.indexOf(parent);
+        console.log("grille n°",indice)
         griser(indice); 
-    });
-}
+        coup(indice);
+    })
+};
 
+
+
+var hover=0;
+function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
+    
+    var casesjouables=grilles[g].children // tableau des cases enfants de notre grille
+    var Arraycasesjouables=Array.from(casesjouables);
+    console.log(casesjouables, Arraycasesjouables)
+    for (var i=0;i<casesjouables.length;i++){
+        casesjouables[i].addEventListener('click',function(event){
+            const target = event.target;
+            var indice=Arraycasesjouables.indexOf(target);
+            console.log("case n°",indice);
+            griser(indice);
+            casesjouables[indice].style.backgroundColor='red';
+            hover+=1;
+            console.log(hover);
+        });
+    };
+}
