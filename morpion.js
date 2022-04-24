@@ -84,12 +84,14 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
     var Arraycasesjouables=Array.from(casesjouables);
     console.log(casesjouables, Arraycasesjouables)
     for (var i=0;i<casesjouables.length;i++){
-        casesjouables[i].onmouseover = function(){this.style.backgroundColor = "rgba(220,220,220,0.5)";};
-        casesjouables[i].onmouseout = function(){this.style.backgroundColor = "rgb(255,255,255)";};
+        casesjouables[i].onmouseover = function(){if (hover==0){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
+        casesjouables[i].onmouseout = function(){if (hover==0){this.style.backgroundColor = "rgb(255,255,255)";}};
+
         casesjouables[i].addEventListener('click',function(event){
             const target = event.target;
             var indice=Arraycasesjouables.indexOf(target);
-            casesjouables[i].style.backgroundColor='red';
+            casesjouables[indice].style.backgroundColor='red';
+            hover=1;
         });
     }
 }
