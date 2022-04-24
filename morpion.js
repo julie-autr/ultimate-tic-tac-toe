@@ -57,11 +57,15 @@ function getValue() {
     else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2}
 };
 
+
+var grillessurvol=[0,0,0,0,0,0,0,0,0];
+
+
 // pour griser toutes les cases sauf celle sur laquelle on a cliqué
 function griser(index){
     for (var j=0;j<grilles.length;j++){
-        if (j!=index){grilles[j].style.backgroundColor="rgba(220,220,220,0.5)"}
-        else{grilles[j].style.backgroundColor="rgb(255,255,255)"}
+        if (j!=index){grilles[j].style.backgroundColor="rgba(220,220,220,0.5)";grillessurvol[j]=0;}
+        else{grilles[j].style.backgroundColor="rgb(255,255,255)";grillessurvol[j]=1;}
     };
 };
 const Arraygrilles=Array.from(grilles);
@@ -72,7 +76,9 @@ for (var i=0;i<grilles.length;i++){
         var indice=Arraygrilles.indexOf(parent);
         console.log("grille n°",indice)
         griser(indice); 
+        grillessurvol[indice]=1;
         coup(indice);
+        console.log(grillessurvol);
     })
 };
 
@@ -84,8 +90,8 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
     var casesjouables=grilles[g].children // tableau des cases enfants de notre grille
     var Arraycasesjouables=Array.from(casesjouables);
     for (var i=0;i<casesjouables.length;i++){
-        casesjouables[i].onmouseover = function(){if (hover==0){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
-        casesjouables[i].onmouseout = function(){if (hover==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
+        casesjouables[i].onmouseover = function(){if (hover==0&&grillessurvol[g]==1){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
+        casesjouables[i].onmouseout = function(){if (hover==0&&grillessurvol[g]==1){this.style.backgroundColor = "rgba(255,255,255,0)";}};
 
         casesjouables[i].addEventListener('click',function(event){
             event.stopPropagation();
@@ -96,7 +102,7 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
             hover=1;
             griser(indice);
             hover=0;
-            coup(indice)
+            coup(indice);
         });
     }
 };
