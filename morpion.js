@@ -78,8 +78,8 @@ for (var i=0;i<grilles.length;i++){
 
 
 
-var hover=0;
 function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
+    var hover=0;
     var casesjouables=grilles[g].children // tableau des cases enfants de notre grille
     var Arraycasesjouables=Array.from(casesjouables);
     console.log(casesjouables, Arraycasesjouables)
