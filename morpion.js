@@ -78,21 +78,20 @@ for (var i=0;i<grilles.length;i++){
 
 
 
-var hover=0;
 function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
-    
+    var hover=0;
     var casesjouables=grilles[g].children // tableau des cases enfants de notre grille
     var Arraycasesjouables=Array.from(casesjouables);
     console.log(casesjouables, Arraycasesjouables)
     for (var i=0;i<casesjouables.length;i++){
+        casesjouables[i].onmouseover = function(){if (hover==0){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
+        casesjouables[i].onmouseout = function(){if (hover==0){this.style.backgroundColor = "rgb(255,255,255)";}};
+
         casesjouables[i].addEventListener('click',function(event){
             const target = event.target;
             var indice=Arraycasesjouables.indexOf(target);
-            console.log("case n°",indice);
-            griser(indice);
             casesjouables[indice].style.backgroundColor='red';
-            hover+=1;
-            console.log(hover);
+            hover=1;
         });
-    };
+    }
 }
