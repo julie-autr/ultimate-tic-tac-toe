@@ -88,12 +88,15 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
         casesjouables[i].onmouseout = function(){if (hover==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
 
         casesjouables[i].addEventListener('click',function(event){
+            event.stopPropagation();
             const target = event.target;
             var indice=Arraycasesjouables.indexOf(target);
             casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
             console.log("case n°",indice)
             hover=1;
             griser(indice);
+            hover=0;
+            coup(indice)
         });
     }
 };
