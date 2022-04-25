@@ -31,6 +31,7 @@ body{
     align-items: center;
     border: solid black 1px;
     opacity: 1;
+    background-color: rgba(255, 255, 255, 0);
 }
 .separateurhor{
     width: 100%;
@@ -59,4 +60,14 @@ input{
 }
 .megagrille{
     visibility: hidden;
+}
+
+#joueur{
+    display: flex;
+    align-items: space-around;
+    visibility: hidden;
+}
+[class^=joueur]{
+    padding: 5px;
+    border-radius: 3px;
 }
