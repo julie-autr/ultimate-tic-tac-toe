@@ -30,8 +30,8 @@ window.addEventListener('load', () => {
 });
 
 let noms=[];
-
 var joueuractuel=0;
+
 
 // pour que le bouton "Valider" ne soit pas cliquable si les noms ne sont pas renseignés
 function manage() {
@@ -54,12 +54,12 @@ function getValue() {
     document.getElementById("toDelete").style.display='none';
     let nb=Math.random();
     if (nb>0.5){document.getElementById("quicommence").innerText=`C'est ${noms[0]} qui commence !`;joueuractuel=1}
-    else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2}
+    else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2};
+    document.getElementsByClassName("megagrille")[0].style.visibility='visible';
 };
 
 
 var grillessurvol=[0,0,0,0,0,0,0,0,0];
-
 
 // pour griser toutes les cases sauf celle sur laquelle on a cliqué
 function griser(index){
@@ -68,6 +68,9 @@ function griser(index){
         else{grilles[j].style.backgroundColor="rgb(255,255,255)";grillessurvol[j]=1;}
     };
 };
+
+var coup1=0; // pour ne pouvoir utiliser 'griser' en cliquant sur une grille uniquement si ça n'a pas encore été fait
+
 const Arraygrilles=Array.from(grilles);
 for (var i=0;i<grilles.length;i++){
     grilles[i].addEventListener('click',function(event){
@@ -75,20 +78,21 @@ for (var i=0;i<grilles.length;i++){
         var parent=target.parentElement;
         var indice=Arraygrilles.indexOf(parent);
         console.log("grille n°",indice)
-        griser(indice); 
+        if (coup1==0){griser(indice);} else console.log("vous ne pouvez plus griser") ;
         grillessurvol[indice]=1;
         coup(indice);
         console.log(grillessurvol);
+        coup1+=1;
     })
 };
-
-
 
 var hover=0;
 
 function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
     var casesjouables=grilles[g].children // tableau des cases enfants de notre grille
     var Arraycasesjouables=Array.from(casesjouables);
+    console.log("on joue dans la case",g,'les cases jouables sont ',casesjouables)
+
     for (var i=0;i<casesjouables.length;i++){
         casesjouables[i].onmouseover = function(){if (hover==0&&grillessurvol[g]==1){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
         casesjouables[i].onmouseout = function(){if (hover==0&&grillessurvol[g]==1){this.style.backgroundColor = "rgba(255,255,255,0)";}};
@@ -102,9 +106,12 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
             hover=1;
             griser(indice);
             hover=0;
+            if (joueuractuel==1){joueuractuel=2; document.getElementById("quijoue").innerText=`C'est à ${noms[1]} de jouer`}
+            else if(joueuractuel==2){joueuractuel=1; document.getElementById("quijoue").innerText=`C'est à ${noms[0]} de jouer`}
+            else console.log("numéro de joueur pas logique");
+
             coup(indice);
         });
     }
 };
 
-//IL FAUDRA PENSER A REMETTRE HOVER A 0
