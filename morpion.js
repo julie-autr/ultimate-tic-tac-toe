@@ -53,9 +53,13 @@ function getValue() {
     console.log(nom1,nom2); noms.push(nom1); noms.push(nom2);
     document.getElementById("toDelete").style.display='none';
     let nb=Math.random();
-    if (nb>0.5){document.getElementById("quicommence").innerText=`C'est ${noms[0]} qui commence !`;joueuractuel=1}
-    else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2};
+    if (nb>0.5){document.getElementById("quicommence").innerText=`C'est ${noms[0]} qui commence !`;joueuractuel=1;document.getElementsByClassName("joueur1")[0].style.backgroundColor='#AFA4CE'}
+    else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2;document.getElementsByClassName("joueur2")[0].style.backgroundColor='#AFA4CE'};
+    document.getElementById("joueur").innerHTML
     document.getElementsByClassName("megagrille")[0].style.visibility='visible';
+    document.getElementById("joueur").style.visibility='visible';
+    document.getElementsByClassName("joueur1")[0].innerText=noms[0]; document.getElementsByClassName("joueur2")[0].innerText=noms[1];
+
 };
 
 
@@ -82,6 +86,7 @@ for (var i=0;i<grilles.length;i++){
         //console.log("grille n°",indice)
         if (coup1==0){griser(indice);
             grillessurvol[indice]=1;
+            document.getElementsByClassName("texte")[0].removeChild(document.getElementById("quicommence"))
             coup(indice);
         }
         
@@ -93,7 +98,6 @@ for (var i=0;i<grilles.length;i++){
 
 
 
-var hover=0;
 
 function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
     var casesjouables=grilles[g].children // tableau des cases enfants de notre grille
@@ -101,27 +105,28 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
     console.log("on joue dans la case",g,'les cases jouables sont ',casesjouables)
 
     for (var i=0;i<casesjouables.length;i++){
-        casesjouables[i].onmouseover = function(){if (hover==0&&grillessurvol[g]==1){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
-        casesjouables[i].onmouseout = function(){if (hover==0&&grillessurvol[g]==1){this.style.backgroundColor = "rgba(255,255,255,0)";}};
-
+        console.log(casesjouables[i].style.backgroundColor)
+        
+        casesjouables[i].onmouseover = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
+        casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'){this.style.backgroundColor = "rgba(255,255,255,0)";}};
+        
             casesjouables[i].addEventListener('click',function(event){
                 event.stopPropagation();
                 const target = event.target;
-                if (grillessurvol[g]==1){
+                if (grillessurvol[g]==1&&target.style.backgroundColor!='rgb(128, 88, 109)'&&target.style.backgroundColor!='rgb(101, 154, 189)'){
                     var indice=Arraycasesjouables.indexOf(target);
                     casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
                     console.log("case n°",indice)
-                    hover=1;
                     griser(indice);
 
-                    
-                    if (joueuractuel==1){joueuractuel=2; document.getElementById("quijoue").innerText=`C'est à ${noms[1]} de jouer`}
-                    else if(joueuractuel==2){joueuractuel=1; document.getElementById("quijoue").innerText=`C'est à ${noms[0]} de jouer`}
+                    if (joueuractuel==1){joueuractuel=2; 
+                    casesjouables[indice].style.backgroundColor='#80586D';document.getElementsByClassName("joueur2")[0].style.backgroundColor='#AFA4CE';document.getElementsByClassName("joueur1")[0].style.backgroundColor='rgb(255,255,255,0)'}
+                    else if(joueuractuel==2){joueuractuel=1; 
+                    casesjouables[indice].style.backgroundColor='#659ABD';document.getElementsByClassName("joueur1")[0].style.backgroundColor='#AFA4CE';document.getElementsByClassName("joueur2")[0].style.backgroundColor='rgb(255,255,255,0)'}
                     else console.log("numéro de joueur pas logique");
                     coup(indice);
                 } else console.log('pas le droit de cliquer ici')
             
-                hover=0;
                 
             });
 
