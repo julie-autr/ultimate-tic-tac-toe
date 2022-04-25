@@ -72,19 +72,26 @@ function griser(index){
 var coup1=0; // pour ne pouvoir utiliser 'griser' en cliquant sur une grille uniquement si ça n'a pas encore été fait
 
 const Arraygrilles=Array.from(grilles);
+
+
 for (var i=0;i<grilles.length;i++){
     grilles[i].addEventListener('click',function(event){
         const target = event.target;
         var parent=target.parentElement;
         var indice=Arraygrilles.indexOf(parent);
-        console.log("grille n°",indice)
-        if (coup1==0){griser(indice);} else console.log("vous ne pouvez plus griser") ;
-        grillessurvol[indice]=1;
-        coup(indice);
-        console.log(grillessurvol);
+        //console.log("grille n°",indice)
+        if (coup1==0){griser(indice);
+            grillessurvol[indice]=1;
+            coup(indice);
+        }
+        
         coup1+=1;
     })
 };
+
+
+
+
 
 var hover=0;
 
@@ -97,21 +104,27 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
         casesjouables[i].onmouseover = function(){if (hover==0&&grillessurvol[g]==1){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
         casesjouables[i].onmouseout = function(){if (hover==0&&grillessurvol[g]==1){this.style.backgroundColor = "rgba(255,255,255,0)";}};
 
-        casesjouables[i].addEventListener('click',function(event){
-            event.stopPropagation();
-            const target = event.target;
-            var indice=Arraycasesjouables.indexOf(target);
-            casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
-            console.log("case n°",indice)
-            hover=1;
-            griser(indice);
-            hover=0;
-            if (joueuractuel==1){joueuractuel=2; document.getElementById("quijoue").innerText=`C'est à ${noms[1]} de jouer`}
-            else if(joueuractuel==2){joueuractuel=1; document.getElementById("quijoue").innerText=`C'est à ${noms[0]} de jouer`}
-            else console.log("numéro de joueur pas logique");
+            casesjouables[i].addEventListener('click',function(event){
+                event.stopPropagation();
+                const target = event.target;
+                if (grillessurvol[g]==1){
+                    var indice=Arraycasesjouables.indexOf(target);
+                    casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
+                    console.log("case n°",indice)
+                    hover=1;
+                    griser(indice);
 
-            coup(indice);
-        });
+                    
+                    if (joueuractuel==1){joueuractuel=2; document.getElementById("quijoue").innerText=`C'est à ${noms[1]} de jouer`}
+                    else if(joueuractuel==2){joueuractuel=1; document.getElementById("quijoue").innerText=`C'est à ${noms[0]} de jouer`}
+                    else console.log("numéro de joueur pas logique");
+                    coup(indice);
+                } else console.log('pas le droit de cliquer ici')
+            
+                hover=0;
+                
+            });
+
     }
 };
 
