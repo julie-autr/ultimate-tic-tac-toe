@@ -130,7 +130,7 @@ function choisirgrille(){
                 grillessurvol[indice]=1;
                 coup(indice);
             }
-            choisir+=1;
+            //if (grilles[indice].style.backgroundColor!='rgb(128, 88, 109)'&&grilles[indice].style.backgroundColor!='rgb(101, 154, 189)'){choisir+=1;}
         })
     };
 
@@ -151,7 +151,6 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
         casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
         
             casesjouables[i].addEventListener('click',function(event){
-                
                 const target = event.target;
                 if (grillessurvol[g]==1&&target.style.backgroundColor!='rgb(128, 88, 109)'&&target.style.backgroundColor!='rgb(101, 154, 189)'){
                     var indice=Arraycasesjouables.indexOf(target);
