@@ -83,14 +83,14 @@ for (var i=0;i<grilles.length;i++){
         const target = event.target;
         var parent=target.parentElement;
         var indice=Arraygrilles.indexOf(parent);
-        //console.log("grille n°",indice)
         if (coup1==0){griser(indice);
             grillessurvol[indice]=1;
             document.getElementsByClassName("texte")[0].removeChild(document.getElementById("quicommence"))
             coup(indice);
         }
         coup1+=1;
-    })
+    }) //quand on clique sur une case pour jouer avec le stoppropagation ca clique pas sur la case
+    // le addeventlistener sera activé après qu'une grille soit gagnée quand on choisit une autre grille mais on s'en fiche 
 };
 
 var grillesjouables=[0,0,0,0,0,0,0,0,0];
@@ -118,18 +118,19 @@ function checkgrille(g){ //g indice de la grille qu'on teste
     else {return grillegagnée}
 }
 
+
 function choisirgrille(){
     for (var i=0;i<grilles.length;i++){
         grilles[i].addEventListener('click',function(event){
             const target = event.target;
             var parent=target.parentElement;
             var indice=Arraygrilles.indexOf(parent);
-            //console.log("grille n°",indice)
             console.log(indice, grillesjouables[indice],choisir)
             if (grillesjouables[indice]==0&&choisir==1){griser(indice);
                 grillessurvol[indice]=1;
                 coup(indice);
             }
+            choisir+=1;
             //if (grilles[indice].style.backgroundColor!='rgb(128, 88, 109)'&&grilles[indice].style.backgroundColor!='rgb(101, 154, 189)'){choisir+=1;}
         })
     };
@@ -151,14 +152,12 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
         casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
         
             casesjouables[i].addEventListener('click',function(event){
+                event.stopImmediatePropagation();
                 const target = event.target;
                 if (grillessurvol[g]==1&&target.style.backgroundColor!='rgb(128, 88, 109)'&&target.style.backgroundColor!='rgb(101, 154, 189)'){
                     var indice=Arraycasesjouables.indexOf(target);
                     casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
-                    //console.log("case n°",indice)
                     
-                    
-
                     if (joueuractuel==1){
                     casesjouables[indice].style.backgroundColor='#80586D';
                     casesjouees1[g][indice]=1;}
@@ -179,16 +178,15 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
 
                     else if (checkgrille(g)==1){
                         for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D'};
-                        choisir=0;
+                        choisir=1;
                         choisirgrille();
                     }
 
                     else if (checkgrille(g)==2){
                         for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD'};
-                        choisir=0;
+                        choisir=1;
                         choisirgrille();
                     }
-
                 } else console.log('pas le droit de cliquer ici')
             
                 
