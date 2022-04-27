@@ -103,11 +103,21 @@ function checkgrille(g){ //g indice de la grille qu'on teste
         if (winning[i].test(binairejouees1)==true){grillegagnée=1}
         if (winning[i].test(binairejouees2)==true){grillegagnée=2}
     }
-    if (grillegagnée==1){grilles[g].style.backgroundColor=='#80586D';grilles[g].children.style.backgroundColor='rgba(255,255,255,0'}
-    else if (grillegagnée==2){grilles[g].style.backgroundColor=='#659ABD';grilles[g].children.style.backgroundColor='rgba(255,255,255,0'}
+    var enfants=grilles[g].children;
+    if (grillegagnée==1){
+        grilles[g].style.backgroundColor=='#80586D';
+        grillesjouables[g]=1;
+        return grillegagnée
+    }
+    else if (grillegagnée==2){
+        grilles[g].style.backgroundColor=='#659ABD';
+        grillesjouables[g]=1;
+        return grillegagnée
+    }
+    else {return grillegagnée}
 }
 
-
+var grillejouables=[0,0,0,0,0,0,0,0,0]
 var casesjouees1=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
 var casesjouees2=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
 
@@ -141,8 +151,9 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
                     casesjouees2[g][indice]=1;}
                     else console.log("numéro de joueur pas logique");
 
-                    checkgrille(g);
-                    coup(indice);
+                    if (checkgrille(g)==0){coup(indice)}
+                    else if (checkgrille(g)==1){}
+                    else if (checkgrille(g)==2){}
                 } else console.log('pas le droit de cliquer ici')
             
                 
