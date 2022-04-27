@@ -94,6 +94,8 @@ for (var i=0;i<grilles.length;i++){
     })
 };
 
+var grillesjouables=[0,0,0,0,0,0,0,0,0];
+
 function checkgrille(g){ //g indice de la grille qu'on teste
     const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
     var binairejouees1=casesjouees1[g].join('');
@@ -103,8 +105,18 @@ function checkgrille(g){ //g indice de la grille qu'on teste
         if (winning[i].test(binairejouees1)==true){grillegagnée=1}
         if (winning[i].test(binairejouees2)==true){grillegagnée=2}
     }
-    if (grillegagnée==1){grilles[g].style.backgroundColor=='#80586D';grilles[g].children.style.backgroundColor='rgba(255,255,255,0'}
-    else if (grillegagnée==2){grilles[g].style.backgroundColor=='#659ABD';grilles[g].children.style.backgroundColor='rgba(255,255,255,0'}
+    var enfants=grilles[g].children;
+    if (grillegagnée==1){
+        grilles[g].style.backgroundColor=='#80586D';
+        grillesjouables[g]=1;
+        return grillegagnée
+    }
+    else if (grillegagnée==2){
+        grilles[g].style.backgroundColor=='#659ABD';
+        grillesjouables[g]=1;
+        return grillegagnée
+    }
+    else {return grillegagnée}
 }
 
 
@@ -117,8 +129,8 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
 
     for (var i=0;i<casesjouables.length;i++){
         
-        casesjouables[i].onmouseover = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
-        casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'){this.style.backgroundColor = "rgba(255,255,255,0)";}};
+        casesjouables[i].onmouseover = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
+        casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
         
             casesjouables[i].addEventListener('click',function(event){
                 event.stopPropagation();
@@ -127,7 +139,7 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
                     var indice=Arraycasesjouables.indexOf(target);
                     casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
                     //console.log("case n°",indice)
-                    griser(indice);
+                    
 
                     if (joueuractuel==1){joueuractuel=2; 
                     casesjouables[indice].style.backgroundColor='#80586D';
@@ -141,8 +153,13 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
                     casesjouees2[g][indice]=1;}
                     else console.log("numéro de joueur pas logique");
 
-                    checkgrille(g);
-                    coup(indice);
+                    if (checkgrille(g)==0){griser(indice);coup(indice)}
+                    else if (checkgrille(g)==1){
+                        for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D'}
+                    }
+                    else if (checkgrille(g)==2){
+                        for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD'}
+                    }
                 } else console.log('pas le droit de cliquer ici')
             
                 
