@@ -186,54 +186,63 @@ var joueespargrille=[0,0,0,0,0,0,0,0,0]
 var casesjouees1=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
 var casesjouees2=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
 
+function listenercase(event){ //g est l'indice de la grille dans laquelle on joue, et donc l'indice du parent de la case 
+    console.log('cliqué');
+    //event.stopImmediatePropagation();
+    const target = event.target;
+    var parent=target.parentElement;
+    var indiceparent=Arraygrilles.indexOf(parent);
+    if (grillessurvol[indiceparent]==1&&target.style.backgroundColor!='rgb(128, 88, 109)'&&target.style.backgroundColor!='rgb(101, 154, 189)'){
+        joueespargrille[indiceparent]+=1;
+        var indice=Arraycasesjouables.indexOf(target);
+        casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
+
+        changercouleurs(indiceparent,indice);
+        if (checkgrille(indiceparent)==0){ //la grille n'a pas été gagnée
+            if (grillesjouables[indice]==0){
+                griser(indice);
+                changercouleurnoms();
+                for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+                coup(indice);  
+            }
+            else {
+                console.log('vous voulez jouer dans une grille finie'); 
+                griser(indice);
+                changercouleurnoms();
+                for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+                if (grillessurvol[indiceparent]==0){choisir=1;choisirgrille();}
+                
+            }
+        }
+        else if (checkgrille(indiceparent)==1){
+            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D'};
+            choisir=1;
+            for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+            choisirgrille();
+        }
+        else if (checkgrille(indiceparent)==2){
+            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD'};
+            choisir=1;
+            for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+            choisirgrille();
+        }
+        
+    }
+    else console.log("pas cette case la coco")
+}
+
+var casesjouables=[];
+var Arraycasesjouables=[];
+
+
 function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
-    var casesjouables=grilles[g].children // tableau des cases enfants de notre grille
-    var Arraycasesjouables=Array.from(casesjouables);
+    casesjouables=grilles[g].children// tableau des cases enfants de notre grille
+    Arraycasesjouables=Array.from(casesjouables);
 
     for (var i=0;i<casesjouables.length;i++){
-        
         casesjouables[i].onmouseover = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
         casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
-        
-            casesjouables[i].addEventListener('click',function(event){
-                //event.stopImmediatePropagation();
-                const target = event.target;
-                if (grillessurvol[g]==1&&target.style.backgroundColor!='rgb(128, 88, 109)'&&target.style.backgroundColor!='rgb(101, 154, 189)'){
-                    joueespargrille[g]+=1;
-                    var indice=Arraycasesjouables.indexOf(target);
-                    casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
-                    
-                    changercouleurs(g,indice);
-                    if (checkgrille(g)==0){ //la grille n'a pas été gagnée
-                        if (grillesjouables[indice]==0){
-                            griser(indice);
-                            changercouleurnoms();
-                            coup(indice);  
-                        }
-                        else {
-                            console.log('vous voulez jouer dans une grille finie'); 
-                            griser(indice);
-                            changercouleurnoms();
-                            if (grillessurvol[g]==0){choisir=1;choisirgrille();}
-                            
-                        }
-                    }
-
-                    else if (checkgrille(g)==1){
-                        for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D'};
-                        choisir=1;
-                        choisirgrille();
-                    }
-
-                    else if (checkgrille(g)==2){
-                        for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD'};
-                        choisir=1;
-                        choisirgrille();
-                    }
-                } else console.log('pas le droit de cliquer ici')
-            
-                
-            });
+        casesjouables[i].addEventListener('click',listenercase);
 
     }
 };
