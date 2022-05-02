@@ -121,6 +121,9 @@ function checkgrille(g){ //g indice de la grille qu'on teste
     return grillegagnée
 }
 
+const htmljoueur=document.getElementById("joueur");
+const htmlmega=document.getElementsByClassName("megagrille")[0];
+
 function checkwin(){
     const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
     var binairegagnees1=grillesgagnees1.join('');
@@ -132,9 +135,9 @@ function checkwin(){
         if (winning[i].test(binairegagnees2)==true){gagnant=2}
     }
     
-    if (gagnant==1){document.getElementById("joueur").innerText=`Bravo !!! C'est ${noms[0]} qui a gagné !`}
-    else if (gagnant==2){document.getElementById("joueur").innerText=`Bravo !!! C'est ${noms[1]} qui a gagné !`}
-    else if (gagnant==0&&binairejouables=='111111111'){document.getElementById("joueur").innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie'}
+    if (gagnant==1){htmljoueur.innerText=`Bravo !!! C'est ${noms[0]} qui a gagné !`;htmlmega.style.visibility='hidden'}
+    else if (gagnant==2){htmljoueur.innerText=`Bravo !!! C'est ${noms[1]} qui a gagné !`;htmlmega.style.visibility='hidden'}
+    else if (gagnant==0&&binairejouables=='111111111'){htmljoueur.innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie';htmlmega.style.visibility='hidden'}
 }
 
 
@@ -187,7 +190,7 @@ var casesjouees2=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0
 
 function listenercase(event){ //g est l'indice de la grille dans laquelle on joue, et donc l'indice du parent de la case 
     console.log('cliqué');
-    //event.stopImmediatePropagation();
+    event.stopImmediatePropagation();
     const target = event.target;
     var parent=target.parentElement;
     var indiceparent=Arraygrilles.indexOf(parent);
@@ -202,6 +205,7 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
                 griser(indice);
                 changercouleurnoms();
                 for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+                checkwin();
                 coup(indice);  
             }
             else {
@@ -210,21 +214,21 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
                 changercouleurnoms();
                 for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
                 choisir=1
-                let promise = new Promise(function(resolve, reject){setTimeout(() => resolve("done"), 50)})
-                promise.then(choisirgrille());
+                checkwin();
+                choisirgrille();
             }
         }
         else if (checkgrille(indiceparent)==1){
             for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D';casesjouables[n].removeEventListener('click',listenercase)};
             choisir=1;
-            let promise = new Promise(function(resolve, reject){setTimeout(() => resolve("done"), 50)})
-            promise.then(choisirgrille());
+            checkwin();
+            choisirgrille();
         }
         else if (checkgrille(indiceparent)==2){
             for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD';casesjouables[n].removeEventListener('click',listenercase)};
             choisir=1;
-            let promise = new Promise(function(resolve, reject){setTimeout(() => resolve("done"), 50)})
-            promise.then(choisirgrille());
+            checkwin();
+            choisirgrille();
         }
         
         
@@ -234,7 +238,6 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
 
 var casesjouables=[];
 var Arraycasesjouables=[];
-
 
 function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
     casesjouables=grilles[g].children// tableau des cases enfants de notre grille
