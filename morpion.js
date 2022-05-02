@@ -151,7 +151,7 @@ function listener(event){
         console.log("vous avez choisi la grille",indice);
         for (var i=0;i<grilles.length;i++){grilles[i].removeEventListener('click',listener)}; 
     }
-    else {console.log("vous ne pouvez pas choisir cette grille")}
+    else {console.log("vous ne pouvez pas choisir cette grille/choisir!=1")}
 }
 
 function choisirgrille(){
@@ -160,7 +160,6 @@ function choisirgrille(){
     }; 
 
 }
-
 
 function changercouleurs(g,ind){
     var casesjouables=grilles[g].children
@@ -210,22 +209,24 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
                 griser(indice);
                 changercouleurnoms();
                 for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
-                if (grillessurvol[indiceparent]==0){choisir=1;choisirgrille();}
-                
+                choisir=1
+                let promise = new Promise(function(resolve, reject){setTimeout(() => resolve("done"), 50)})
+                promise.then(choisirgrille());
             }
         }
         else if (checkgrille(indiceparent)==1){
-            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D'};
+            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D';casesjouables[n].removeEventListener('click',listenercase)};
             choisir=1;
-            for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
-            choisirgrille();
+            let promise = new Promise(function(resolve, reject){setTimeout(() => resolve("done"), 50)})
+            promise.then(choisirgrille());
         }
         else if (checkgrille(indiceparent)==2){
-            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD'};
+            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD';casesjouables[n].removeEventListener('click',listenercase)};
             choisir=1;
-            for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
-            choisirgrille();
+            let promise = new Promise(function(resolve, reject){setTimeout(() => resolve("done"), 50)})
+            promise.then(choisirgrille());
         }
+        
         
     }
     else console.log("pas cette case la coco")
