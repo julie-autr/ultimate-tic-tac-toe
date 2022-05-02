@@ -150,7 +150,7 @@ function choisirgrille(){
                 choisir+=1;
                 console.log("vous avez choisi la grille",indice)
             }
-            else console.log("vous ne pouvez pas choisir cette grille")
+            else console.log("vous ne pouvez pas choisir cette grille",grillesjouables[indice],choisir)
             
         })
     };  
@@ -190,7 +190,7 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
         casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
         
             casesjouables[i].addEventListener('click',function(event){
-                event.stopImmediatePropagation();
+                //event.stopImmediatePropagation();
                 const target = event.target;
                 if (grillessurvol[g]==1&&target.style.backgroundColor!='rgb(128, 88, 109)'&&target.style.backgroundColor!='rgb(101, 154, 189)'){
                     joueespargrille[g]+=1;
@@ -208,8 +208,8 @@ function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a
                             console.log('vous voulez jouer dans une grille finie'); 
                             griser(indice);
                             changercouleurnoms();
-                            choisir=1;
-                            choisirgrille();
+                            if (grillessurvol[g]==0){choisir=1;choisirgrille();}
+                            
                         }
                     }
 
