@@ -8,10 +8,11 @@
     <body>
     <div class="texte">
         <h1>Morpion géant</h1>
-        <p>9 grilles de morpion, formant un morpion géant. Pour rappel, on gagne en alignant verticalement, horizontalement ou diagonalement 3 fois le même symbole.</p>
+        <p>9 grilles de morpion, formant un morpion géant. Pour rappel, on gagne une grille en alignant verticalement, horizontalement ou diagonalement 3 fois la même couleur.</p>
         <p>Cliquer dans la n-ième case d'une petite grille forcera votre adversaire à jouer dans la n-ième grille</p>
-        <p>Exemple : Je joue les croix, et joue dans la grille d'en bas à gauche. Je décide de mettre ma croix dans la case en haut à droite. Mon adversaire devra alors ensuite jouer dans la case en haut à droite.</p>
-        <p>Lorsque vous gagnez une sous-grille, cette dernière est remplacée par votre symbole. Si il y a égalité sur une sous-grille, celle-ci est perdue. Votre but est de gagner 3 sous-grilles alignées, pour gagner le morpion géant !</p>
+        <p>Exemple : Je joue en bleu, et joue dans la grille d'en bas à gauche. Je décide de mettre ma couleur dans la case en haut à droite. Mon adversaire devra alors ensuite jouer dans la case en haut à droite.</p>
+        <p>Lorsque vous gagnez une sous-grille, cette dernière est remplacée par votre couleur. Si il y a égalité sur une sous-grille, celle-ci est perdue. Si le coup que vous faites voue amène à jouer dans une grille déjà terminée, vous restez dans la grille actuelle.
+            Votre but est de gagner 3 sous-grilles alignées, pour gagner le morpion géant !</p>
         <div class="separateurhor"></div>
         <div id="toDelete">
             <label >Nom du joueur 1:</label>
@@ -22,6 +23,7 @@
         </div>
         <div id="quicommence"></div>
         <div id="joueur"><p class="joueur1"></p><div class="separateurhor"></div><p class="joueur2"></p></div>
+        <div id="commentaire"></div>
     </div>
     <div class="quicommence"></div>
     <div class="megagrille">

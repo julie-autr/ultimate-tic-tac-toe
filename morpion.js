@@ -53,8 +53,8 @@ function getValue() {
     console.log(nom1,nom2); noms.push(nom1); noms.push(nom2);
     document.getElementById("toDelete").style.display='none';
     let nb=Math.random();
-    if (nb>0.5){document.getElementById("quicommence").innerText=`C'est ${noms[0]} qui commence !`;joueuractuel=1;document.getElementsByClassName("joueur1")[0].style.backgroundColor='#AFA4CE'}
-    else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2;document.getElementsByClassName("joueur2")[0].style.backgroundColor='#AFA4CE'};
+    if (nb>0.5){document.getElementById("quicommence").innerText=`C'est ${noms[0]} qui commence !`;joueuractuel=1;document.getElementsByClassName("joueur1")[0].style.backgroundColor='#80586D'}
+    else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2;document.getElementsByClassName("joueur2")[0].style.backgroundColor='#659ABD'};
     document.getElementById("joueur").innerHTML
     document.getElementsByClassName("megagrille")[0].style.visibility='visible';
     document.getElementById("joueur").style.visibility='visible';
@@ -94,6 +94,8 @@ for (var i=0;i<grilles.length;i++){
 };
 
 var grillesjouables=[0,0,0,0,0,0,0,0,0];
+var grillesgagnees1=[0,0,0,0,0,0,0,0,0];
+var grillesgagnees2=[0,0,0,0,0,0,0,0,0];
 
 function checkgrille(g){ //g indice de la grille qu'on teste
     const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
@@ -108,89 +110,139 @@ function checkgrille(g){ //g indice de la grille qu'on teste
     if (grillegagnée==1){
         grilles[g].style.backgroundColor=='#80586D';
         grillesjouables[g]=1;
-        return grillegagnée
+        grillesgagnees1[g]=1;
     }
     else if (grillegagnée==2){
         grilles[g].style.backgroundColor=='#659ABD';
         grillesjouables[g]=1;
-        return grillegagnée
+        grillesgagnees2[g]=1;
     }
-    else {return grillegagnée}
+    else if (joueespargrille[g]==9&&grillegagnée==0){grillesjouables[g]=1;document.getElementById("commentaire").innerText='Cette grille est perdue'}
+    return grillegagnée
 }
 
+function checkwin(){
+    const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
+    var binairegagnees1=grillesgagnees1.join('');
+    var binairegagnees2=grillesgagnees2.join('');
+    var binairejouables=grillesjouables.join('');
+    var gagnant=0;
+    for (var i=0;i<winning.length;i++){
+        if (winning[i].test(binairegagnees1)==true){gagnant=1}
+        if (winning[i].test(binairegagnees2)==true){gagnant=2}
+    }
+    
+    if (gagnant==1){document.getElementById("joueur").innerText=`Bravo !!! C'est ${noms[0]} qui a gagné !`}
+    else if (gagnant==2){document.getElementById("joueur").innerText=`Bravo !!! C'est ${noms[1]} qui a gagné !`}
+    else if (gagnant==0&&binairejouables=='111111111'){document.getElementById("joueur").innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie'}
+}
+
+
+
+function listener(event){
+    const target = event.target;
+    var parent=target.parentElement;
+    var indice=Arraygrilles.indexOf(parent);
+    if (grillesjouables[indice]==0&&choisir==1){
+        griser(indice);
+        grillessurvol[indice]=1;
+        coup(indice);
+        choisir+=1;
+        console.log("vous avez choisi la grille",indice);
+        for (var i=0;i<grilles.length;i++){grilles[i].removeEventListener('click',listener)}; 
+    }
+    else {console.log("vous ne pouvez pas choisir cette grille")}
+}
 
 function choisirgrille(){
     for (var i=0;i<grilles.length;i++){
-        grilles[i].addEventListener('click',function(event){
-            const target = event.target;
-            var parent=target.parentElement;
-            var indice=Arraygrilles.indexOf(parent);
-            console.log(indice, grillesjouables[indice],choisir)
-            if (grillesjouables[indice]==0&&choisir==1){griser(indice);
-                grillessurvol[indice]=1;
-                coup(indice);
-            }
-            choisir+=1;
-            //if (grilles[indice].style.backgroundColor!='rgb(128, 88, 109)'&&grilles[indice].style.backgroundColor!='rgb(101, 154, 189)'){choisir+=1;}
-        })
-    };
+        grilles[i].addEventListener('click',listener)
+    }; 
 
-    
 }
-var choisir=0;
 
+
+function changercouleurs(g,ind){
+    var casesjouables=grilles[g].children
+    if (joueuractuel==1){
+        casesjouables[ind].style.backgroundColor='#80586D';
+        casesjouees1[g][ind]=1;}
+
+    else if(joueuractuel==2){ 
+        casesjouables[ind].style.backgroundColor='#659ABD';
+        casesjouees2[g][ind]=1;
+    }
+
+    else console.log("numéro de joueur pas logique");
+}
+function changercouleurnoms(){
+    if (joueuractuel==1){joueuractuel=2;document.getElementsByClassName("joueur2")[0].style.backgroundColor='#659ABD';document.getElementsByClassName("joueur1")[0].style.backgroundColor='rgb(255,255,255,0)';} 
+    else if (joueuractuel==2){joueuractuel=1;document.getElementsByClassName("joueur1")[0].style.backgroundColor='#80586D';document.getElementsByClassName("joueur2")[0].style.backgroundColor='rgb(255,255,255,0)';}; 
+}
+
+
+var choisir=0;
+var joueespargrille=[0,0,0,0,0,0,0,0,0]
 var casesjouees1=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
 var casesjouees2=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
 
+function listenercase(event){ //g est l'indice de la grille dans laquelle on joue, et donc l'indice du parent de la case 
+    console.log('cliqué');
+    //event.stopImmediatePropagation();
+    const target = event.target;
+    var parent=target.parentElement;
+    var indiceparent=Arraygrilles.indexOf(parent);
+    if (grillessurvol[indiceparent]==1&&target.style.backgroundColor!='rgb(128, 88, 109)'&&target.style.backgroundColor!='rgb(101, 154, 189)'){
+        joueespargrille[indiceparent]+=1;
+        var indice=Arraycasesjouables.indexOf(target);
+        casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
+
+        changercouleurs(indiceparent,indice);
+        if (checkgrille(indiceparent)==0){ //la grille n'a pas été gagnée
+            if (grillesjouables[indice]==0){
+                griser(indice);
+                changercouleurnoms();
+                for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+                coup(indice);  
+            }
+            else {
+                console.log('vous voulez jouer dans une grille finie'); 
+                griser(indice);
+                changercouleurnoms();
+                for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+                if (grillessurvol[indiceparent]==0){choisir=1;choisirgrille();}
+                
+            }
+        }
+        else if (checkgrille(indiceparent)==1){
+            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D'};
+            choisir=1;
+            for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+            choisirgrille();
+        }
+        else if (checkgrille(indiceparent)==2){
+            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD'};
+            choisir=1;
+            for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+            choisirgrille();
+        }
+        
+    }
+    else console.log("pas cette case la coco")
+}
+
+var casesjouables=[];
+var Arraycasesjouables=[];
+
+
 function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
-    var casesjouables=grilles[g].children // tableau des cases enfants de notre grille
-    var Arraycasesjouables=Array.from(casesjouables);
+    casesjouables=grilles[g].children// tableau des cases enfants de notre grille
+    Arraycasesjouables=Array.from(casesjouables);
 
     for (var i=0;i<casesjouables.length;i++){
-        
         casesjouables[i].onmouseover = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
         casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
-        
-            casesjouables[i].addEventListener('click',function(event){
-                event.stopImmediatePropagation();
-                const target = event.target;
-                if (grillessurvol[g]==1&&target.style.backgroundColor!='rgb(128, 88, 109)'&&target.style.backgroundColor!='rgb(101, 154, 189)'){
-                    var indice=Arraycasesjouables.indexOf(target);
-                    casesjouables[indice].style.backgroundColor="rgba(255,255,255,0)";
-                    
-                    if (joueuractuel==1){
-                    casesjouables[indice].style.backgroundColor='#80586D';
-                    casesjouees1[g][indice]=1;}
-
-                    else if(joueuractuel==2){ 
-                    casesjouables[indice].style.backgroundColor='#659ABD';
-                    casesjouees2[g][indice]=1;}
-
-                    else console.log("numéro de joueur pas logique");
-
-
-                    if (checkgrille(g)==0){
-                        griser(indice);
-                        if (joueuractuel==1){joueuractuel=2;document.getElementsByClassName("joueur2")[0].style.backgroundColor='#AFA4CE';document.getElementsByClassName("joueur1")[0].style.backgroundColor='rgb(255,255,255,0)';} 
-                        else if (joueuractuel==2){joueuractuel=1;document.getElementsByClassName("joueur1")[0].style.backgroundColor='#AFA4CE';document.getElementsByClassName("joueur2")[0].style.backgroundColor='rgb(255,255,255,0)';}; 
-                        coup(indice);  
-                    }
-
-                    else if (checkgrille(g)==1){
-                        for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D'};
-                        choisir=1;
-                        choisirgrille();
-                    }
-
-                    else if (checkgrille(g)==2){
-                        for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD'};
-                        choisir=1;
-                        choisirgrille();
-                    }
-                } else console.log('pas le droit de cliquer ici')
-            
-                
-            });
+        casesjouables[i].addEventListener('click',listenercase);
 
     }
 };
