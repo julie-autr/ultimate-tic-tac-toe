@@ -138,23 +138,29 @@ function checkwin(){
 }
 
 
+
+function listener(event){
+    const target = event.target;
+    var parent=target.parentElement;
+    var indice=Arraygrilles.indexOf(parent);
+    if (grillesjouables[indice]==0&&choisir==1){
+        griser(indice);
+        grillessurvol[indice]=1;
+        coup(indice);
+        choisir+=1;
+        console.log("vous avez choisi la grille",indice);
+        for (var i=0;i<grilles.length;i++){grilles[i].removeEventListener('click',listener)}; 
+    }
+    else {console.log("vous ne pouvez pas choisir cette grille")}
+}
+
 function choisirgrille(){
     for (var i=0;i<grilles.length;i++){
-        grilles[i].addEventListener('click',function(event){
-            const target = event.target;
-            var parent=target.parentElement;
-            var indice=Arraygrilles.indexOf(parent);
-            if (grillesjouables[indice]==0&&choisir==1){griser(indice);
-                grillessurvol[indice]=1;
-                coup(indice);
-                choisir+=1;
-                console.log("vous avez choisi la grille",indice)
-            }
-            else console.log("vous ne pouvez pas choisir cette grille",grillesjouables[indice],choisir)
-            
-        })
-    };  
+        grilles[i].addEventListener('click',listener)
+    }; 
+
 }
+
 
 function changercouleurs(g,ind){
     var casesjouables=grilles[g].children
