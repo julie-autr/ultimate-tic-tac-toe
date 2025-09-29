@@ -2,17 +2,31 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="morpion.css" />
+        <link rel="stylesheet" href="style.css" />
         <title>Morpion géant</title>
     </head>
     <body>
     <div class="texte">
         <h1>Morpion géant</h1>
-        <p>9 grilles de morpion, formant un morpion géant. Pour rappel, on gagne une grille en alignant verticalement, horizontalement ou diagonalement 3 fois la même couleur.</p>
-        <p>Cliquer dans la n-ième case d'une petite grille forcera votre adversaire à jouer dans la n-ième grille</p>
-        <p>Exemple : Je joue en bleu, et joue dans la grille d'en bas à gauche. Je décide de mettre ma couleur dans la case en haut à droite. Mon adversaire devra alors ensuite jouer dans la case en haut à droite.</p>
-        <p>Lorsque vous gagnez une sous-grille, cette dernière est remplacée par votre couleur. Si il y a égalité sur une sous-grille, celle-ci est perdue. Si le coup que vous faites voue amène à jouer dans une grille déjà terminée, vous restez dans la grille actuelle.
-            Votre but est de gagner 3 sous-grilles alignées, pour gagner le morpion géant !</p>
+        <h2>Règles du morpion géant</h2>
+        <p>Le plateau est composé de 9 petites grilles de morpion.</p>
+        <p><strong>L'objectif ?</strong> Remporter 3 petites grilles alignées (horizontalement, verticalement ou en diagonale) afin de gagner la partie.</p>
+
+        <h2>Déroulement d’un tour :</h2>
+        <ul>
+        <li>Tu joues dans une petite grille.</li>
+        <li>La case où tu poses ton pion détermine la grille où ton adversaire devra jouer au coup suivant.</li>
+        </ul>
+        <p><em>Exemple :</em> tu joues en bleu, dans la petite grille en bas à gauche.  
+        Si tu poses ton pion dans la case en haut à droite de cette grille, ton adversaire sera obligé de jouer dans la petite grille en haut à droite du grand plateau.</p>
+
+        <h2>Victoire et blocages :</h2>
+        <ul>
+        <li>Quand un joueur aligne 3 symboles dans une petite grille, il gagne cette grille, qui est alors remplacée par sa couleur.</li>
+        <li>Si une petite grille se termine par une égalité, elle est bloquée et ne comptera pour personne.</li>
+        <li>Si un coup envoie l’adversaire vers une petite grille déjà terminée (gagnée ou bloquée), il doit rejouer dans la grille actuelle.</li>
+        </ul>
+
         <div class="separateurhor"></div>
         <div id="toDelete">
             <label >Nom du joueur 1:</label>
@@ -141,6 +155,6 @@
             </div>
         </div>
     </div>
-    <script src="morpion.js"></script>
+    <script src="script3.js"></script>
     </body>
 </html>

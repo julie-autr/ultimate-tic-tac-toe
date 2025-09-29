@@ -3,6 +3,16 @@ const lignes=document.querySelectorAll('[class^="ligne"]');
 const cases=document.querySelectorAll('.case');
 const megagrille=document.querySelector('.megagrille')
 
+
+let noms=[];
+var joueuractuel=0;
+let grilleactuelle = None;
+
+function setHoverGrille(index, mode) {
+    // mode = "case", "grille" ou "none"
+    grilles[index].setAttribute("data-hover", mode);
+}
+
 // pour vérifier si la méga grille est un multiple de 3 (pour que les sous-grilles soient exactement de la même taille)
 function estMultipleDeTrois(nombre){
     if (Number.isInteger(nombre/3)){return true};
@@ -29,10 +39,6 @@ window.addEventListener('load', () => {
 };  
 });
 
-let noms=[];
-var joueuractuel=0;
-
-
 // pour que le bouton "Valider" ne soit pas cliquable si les noms ne sont pas renseignés
 function manage() {
     var txt1 = document.getElementById("in1").value;
@@ -42,36 +48,48 @@ function manage() {
         bt.disabled = false;  
     }
     else {
-        bt.disabled = false; //RECHANGER EN TRUE APRES
+        bt.disabled = true; 
     }
-};
+}; 
 
-// pour récupérer les noms des deux joueurs, déterminer qui commence
+// Losque la partie commence, Valider cliqué 
 function getValue() {
+    console.log("Bouton Valider cliqué")
+    // Récupérer les noms
     var nom1 = document.getElementById("in1").value;
     var nom2 = document.getElementById("in2").value;
     console.log(nom1,nom2); noms.push(nom1); noms.push(nom2);
     document.getElementById("toDelete").style.display='none';
+    // Choisir qui commence
     let nb=Math.random();
     if (nb>0.5){document.getElementById("quicommence").innerText=`C'est ${noms[0]} qui commence !`;joueuractuel=1;document.getElementsByClassName("joueur1")[0].style.backgroundColor='#80586D'}
     else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2;document.getElementsByClassName("joueur2")[0].style.backgroundColor='#659ABD'};
     document.getElementById("joueur").innerHTML
+    // Afficher la grille et les autres trucs
     document.getElementsByClassName("megagrille")[0].style.visibility='visible';
+    document.querySelectorAll('[class^=grille]').forEach(g => {
+    g.setAttribute("data-hover", "grille");
+    });
     document.getElementById("joueur").style.visibility='visible';
     document.getElementsByClassName("joueur1")[0].innerText=noms[0]; document.getElementsByClassName("joueur2")[0].innerText=noms[1];
-
 };
 
 
 var grillessurvol=[0,0,0,0,0,0,0,0,0];
 
 // pour griser toutes les cases sauf celle sur laquelle on a cliqué
-function griser(index){
-    for (var j=0;j<grilles.length;j++){
-        if (j!=index){grilles[j].style.backgroundColor="rgba(220,220,220,0.5)";grillessurvol[j]=0;}
-        else{grilles[j].style.backgroundColor="rgb(255,255,255)";grillessurvol[j]=1;}
-    };
-};
+function griser(index) {
+    grilles.forEach((grille, j) => {
+        if (j === index) {
+            setHoverGrille(j, "case");   // Seule cette grille permet le hover sur ses cases
+            grillessurvol[j] = 1;
+        } else {
+            setHoverGrille(j, "none");   // Les autres sont bloquées
+            grillessurvol[j] = 0;
+        }
+    });
+    console.log("Toutes les grilles sont grisées sauf la grille n°", index)
+}
 
 var coup1=0; // pour ne pouvoir utiliser 'griser' en cliquant sur une grille uniquement si ça n'a pas encore été fait
 
@@ -169,12 +187,10 @@ function changercouleurs(g,ind){
     if (joueuractuel==1){
         casesjouables[ind].style.backgroundColor='#80586D';
         casesjouees1[g][ind]=1;}
-
     else if(joueuractuel==2){ 
         casesjouables[ind].style.backgroundColor='#659ABD';
         casesjouees2[g][ind]=1;
     }
-
     else console.log("numéro de joueur pas logique");
 }
 function changercouleurnoms(){
@@ -239,15 +255,11 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
 var casesjouables=[];
 var Arraycasesjouables=[];
 
-function coup(g){ //g est l'indice de la grille dans laquelle on se situe, qui a déjà été grisée
-    casesjouables=grilles[g].children// tableau des cases enfants de notre grille
-    Arraycasesjouables=Array.from(casesjouables);
+function coup(g) { 
+    casesjouables = grilles[g].children; 
+    Arraycasesjouables = Array.from(casesjouables);
 
-    for (var i=0;i<casesjouables.length;i++){
-        casesjouables[i].onmouseover = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(220,220,220,0.5)";}};
-        casesjouables[i].onmouseout = function(){if (grillessurvol[g]==1&&this.style.backgroundColor!='rgb(128, 88, 109)'&&this.style.backgroundColor!='rgb(101, 154, 189)'&&grillesjouables[g]==0){this.style.backgroundColor = "rgba(255,255,255,0)";}};
-        casesjouables[i].addEventListener('click',listenercase);
-
+    for (var i = 0; i < casesjouables.length; i++) {
+        casesjouables[i].addEventListener('click', listenercase);
     }
-};
-
+}
