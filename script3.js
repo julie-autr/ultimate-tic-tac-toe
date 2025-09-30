@@ -104,7 +104,7 @@ function griser(index) {
     console.log("Toutes les grilles sont grisées sauf la grille n°", index)
 }
 
-var coup1=0; // pour ne pouvoir utiliser 'griser' en cliquant sur une grille uniquement si ça n'a pas encore été fait
+var canSelectGrid=1; // pour ne pouvoir utiliser 'griser' en cliquant sur une grille uniquement si ça n'a pas encore été fait
 const Arraygrilles=Array.from(grilles);
 
 
@@ -142,15 +142,18 @@ function chooseGrid() {
         const target = event.target;
         var parent=target.parentElement;
         var indice=Arraygrilles.indexOf(parent);
-        if (coup1==0){
+        if (canSelectGrid==1){
             griser(indice);
             grilleactuelle=indice;
             console.log("Grille ", indice, " choisie")
-            document.getElementsByClassName("texte")[0].removeChild(document.getElementById("quicommence"))
+            // Lorsqu'on choisit pour la première fois, on supprime le texte 
+            const parent = document.getElementsByClassName("texte")[0];
+            const enfant = document.getElementById("quicommence");
+            if (parent && enfant) {parent.removeChild(enfant);}
             coup(indice);
         }
         else{console.log("Grille ", indice, " cliquée, mais une autre grille choisie avant")}
-        coup1+=1;
+        canSelectGrid+=0;
     }) 
     }
 }
@@ -213,18 +216,24 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
             }
             else {
                 console.log('Le coup emmène dans une grille finie'); 
-                choisir=1
+                canSelectGrid=1;
                 chooseGrid();
             }
         }
         else if (checkgrille(indice_grille)==1){
-            for (var n=0;n<casesjouables.length;n++){setPlayability("case",casesjouables[n], "playedby1" )};
-            choisir=1;
+            for (var n = 0; n < casesjouables.length; n++) {
+                let idx = Array.prototype.indexOf.call(cases, casesjouables[n]);
+                if (idx !== -1) {setPlayability("case", idx, "playedby1");}
+            }            
+            canSelectGrid=1;
             chooseGrid();
         }
         else if (checkgrille(indice_grille)==2){
-            for (var n=0;n<casesjouables.length;n++){setPlayability("case",casesjouables[n], "playedby1" )};
-            choisir=1;
+            for (var n = 0; n < casesjouables.length; n++) {
+                let idx = Array.prototype.indexOf.call(cases, casesjouables[n]);
+                if (idx !== -1) {setPlayability("case", idx, "playedby2");}
+            }            
+            canSelectGrid=1;
             chooseGrid();
         }
     }

@@ -157,8 +157,8 @@ body {
     transition: background-color 0.2s ease;
 }
 
-/* Hover activÃ© sur les cases d'une grille */
-[class^="grille"][data-hover="case"] .case:hover {
+/* Hover activée sur les cases d'une grille */
+[class^="grille"][data-hover="case"] .case[data-playable="playable"]:hover {
   background-color: rgba(220,220,220,0.5) !important;
 }
 
