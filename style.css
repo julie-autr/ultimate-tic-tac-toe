@@ -170,6 +170,29 @@ body {
   background-color: rgb(220, 220, 220);
 }
 
+/* Couleur de fond d'une grille quand elle est gagnée */ 
+[class^="grille"][data-playable="wonby1"] {
+  background-color: #80586D ;
+}
+[class^="grille"][data-playable="wonby2"] {
+  background-color: #659ABD ;
+}
+
+/* Couleur de fond des prénoms */ 
+.joueur1[data-active="true"] {
+    background-color: #80586D;
+}
+
+.joueur2[data-active="true"] {
+    background-color: #659ABD;
+}
+
+.joueur1[data-active="false"],
+.joueur2[data-active="false"] {
+    background-color: transparent;
+}
+
+
 /* Couleur des cases */
 [class^="case"][data-playable="playedby1"]{
   background-color: #80586D;

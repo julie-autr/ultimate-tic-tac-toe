@@ -179,7 +179,6 @@ function choisirgrille(){
     for (var i=0;i<grilles.length;i++){
         grilles[i].addEventListener('click',listener)
     }; 
-
 }
 
 function changercouleurs(g,ind){

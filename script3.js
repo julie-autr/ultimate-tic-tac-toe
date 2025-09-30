@@ -3,8 +3,15 @@ const lignes=document.querySelectorAll('[class^="ligne"]');
 const cases=document.querySelectorAll('.case');
 const megagrille=document.querySelector('.megagrille')
 
+const htmljoueur=document.getElementById("joueur");
+const htmlmega=document.getElementsByClassName("megagrille")[0];
+
 grilles.forEach((grille, index) => {
   setPlayability("grille", index, "playable")
+});
+
+cases.forEach((c, index) => {
+  setPlayability("case", index, "playable")
 });
 
 let noms=[];
@@ -66,6 +73,25 @@ function setPlayability(element, index, mode) {
     }
 }
 
+function setActivePlayer(player) {
+    // player = 1 ou 2
+    const joueur1 = document.getElementsByClassName("joueur1")[0];
+    const joueur2 = document.getElementsByClassName("joueur2")[0];
+
+    if (!joueur1 || !joueur2) {
+        console.error("Les éléments joueur1 / joueur2 n'existent pas encore dans le DOM !");
+        return;
+    }
+    if (player === 1) {
+        joueur1.setAttribute("data-active", "true");
+        joueur2.setAttribute("data-active", "false");
+    } else if (player === 2) {
+        joueur1.setAttribute("data-active", "false");
+        joueur2.setAttribute("data-active", "true");
+    }
+}
+
+
 // pour griser toutes les cases sauf celle sur laquelle on a cliqué
 function griser(index) {
     grilles.forEach((grille, j) => {
@@ -92,8 +118,15 @@ function getValue() {
     document.getElementById("toDelete").style.display='none';
     // Choisir qui commence
     let nb=Math.random();
-    if (nb>0.5){document.getElementById("quicommence").innerText=`C'est ${noms[0]} qui commence !`;joueuractuel=1;document.getElementsByClassName("joueur1")[0].style.backgroundColor='#80586D'}
-    else{document.getElementById("quicommence").innerText=`C'est ${noms[1]} qui commence !`;joueuractuel=2;document.getElementsByClassName("joueur2")[0].style.backgroundColor='#659ABD'};
+    if (nb > 0.5) {
+        document.getElementById("quicommence").innerText = `C'est ${noms[0]} qui commence !`;
+        joueuractuel = 1;
+        setActivePlayer(1);
+    } else {
+        document.getElementById("quicommence").innerText = `C'est ${noms[1]} qui commence !`;
+        joueuractuel = 2;
+        setActivePlayer(2);
+    }
     document.getElementById("joueur").innerHTML
     // Afficher la grille et les autres trucs
     document.getElementsByClassName("megagrille")[0].style.visibility='visible';
@@ -144,50 +177,136 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
     event.stopImmediatePropagation();
     const target = event.target;
     var parent=target.parentElement;
-    var indiceparent=Arraygrilles.indexOf(parent);
-    if (grilleactuelle==indiceparent && parent.getAttribute("data-playable") === "playable"){
-        console.log("Cette case est jouable")
-        joueespargrille[indiceparent]+=1;
-        const ind = Array.from(cases).indexOf(target);
-        if (joueuractuel === 1){setPlayability("case", ind, "playedby1"); casesjouees1[indiceparent][ind]=1;}
-        else if (joueuractuel === 2){setPlayability("case", ind, "playedby2"); casesjouees2[indiceparent][ind]=1;}
+    
+    var indice_grille=Arraygrilles.indexOf(parent);
+    const indice_case_global = Array.from(cases).indexOf(target);
+    const indice_case_in_grille = Array.from(parent.children).indexOf(target);
+    // L'indice de la case dans la grille est l'indice de la grille suivante
 
-        /* if (checkgrille(indiceparent)==0){ //la grille n'a pas été gagnée
-            if (grillesjouables[indice]==0){
-                griser(indice);
-                changercouleurnoms();
-                for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
-                checkwin();
-                coup(indice);  
+    console.log("Variable grille actuelle = ", grilleactuelle);
+    console.log("Indice_grille récupéré = ", indice_grille);
+    console.log("target.getAttribute(data-playable)", target.getAttribute("data-playable"))
+
+    if (grilleactuelle==indice_grille && target.getAttribute("data-playable") === "playable"){
+        console.log("On peut jouer cette case")
+        joueespargrille[indice_grille]+=1;
+
+        console.log("Case globale cliquée :", indice_case_global);
+        console.log("Case locale cliquée :", indice_case_in_grille);
+
+
+        if (joueuractuel === 1){setPlayability("case", indice_case_global, "playedby1"); casesjouees1[indice_grille][indice_case_in_grille]=1;}
+        else if (joueuractuel === 2){setPlayability("case", indice_case_global, "playedby2"); casesjouees2[indice_grille][indice_case_in_grille]=1;}
+
+        for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+        checkwin();
+
+        if (checkgrille(indice_grille)==0){ //la grille n'a pas été gagnée
+            checkwin();
+            griser(indice_case_in_grille);
+            changercouleurnoms();
+
+            if (grilles[indice_case_in_grille].getAttribute("data-playable") === "playable"){
+                console.log("On joue désormais dans la grille ", indice_case_in_grille)
+                grilleactuelle = indice_case_in_grille;
+                coup(indice_case_in_grille);  
             }
             else {
-                console.log('vous voulez jouer dans une grille finie'); 
-                griser(indice);
-                changercouleurnoms();
-                for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
+                console.log('Le coup emmène dans une grille finie'); 
                 choisir=1
-                checkwin();
-                choisirgrille();
+                chooseGrid();
             }
         }
-        else if (checkgrille(indiceparent)==1){
-            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#80586D';casesjouables[n].removeEventListener('click',listenercase)};
+        else if (checkgrille(indice_grille)==1){
+            for (var n=0;n<casesjouables.length;n++){setPlayability("case",casesjouables[n], "playedby1" )};
             choisir=1;
-            checkwin();
-            choisirgrille();
+            chooseGrid();
         }
-        else if (checkgrille(indiceparent)==2){
-            for (var n=0;n<casesjouables.length;n++){casesjouables[n].style.backgroundColor='#659ABD';casesjouables[n].removeEventListener('click',listenercase)};
+        else if (checkgrille(indice_grille)==2){
+            for (var n=0;n<casesjouables.length;n++){setPlayability("case",casesjouables[n], "playedby1" )};
             choisir=1;
-            checkwin();
-            choisirgrille();
-        }*/
+            chooseGrid();
+        }
     }
-    else console.log("pas cette case la coco")
+    else console.log("Tu ne peux pas jouer cette case coco")
 }
 
 
-function changercouleurnoms(){
-    if (joueuractuel==1){joueuractuel=2;document.getElementsByClassName("joueur2")[0].style.backgroundColor='#659ABD';document.getElementsByClassName("joueur1")[0].style.backgroundColor='rgb(255,255,255,0)';} 
-    else if (joueuractuel==2){joueuractuel=1;document.getElementsByClassName("joueur1")[0].style.backgroundColor='#80586D';document.getElementsByClassName("joueur2")[0].style.backgroundColor='rgb(255,255,255,0)';}; 
+function checkgrille(indice){ //g indice de la grille qu'on teste
+    const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
+    var binairejouees1=casesjouees1[indice].join('');
+    var binairejouees2=casesjouees2[indice].join('');
+    var grillegagnée=0;
+    for (var i=0;i<winning.length;i++){
+        if (winning[i].test(binairejouees1)==true){grillegagnée=1}
+        if (winning[i].test(binairejouees2)==true){grillegagnée=2}
+    }
+    var enfants=grilles[indice].children;
+    if (grillegagnée==1){
+        setPlayability("grille", indice, "wonby1")
+    }
+    else if (grillegagnée==2){
+        setPlayability("grille", indice, "wonby2")
+    }
+    else if (joueespargrille[indice]==9&&grillegagnée==0){setPlayability("grille", indice, "exaequo");document.getElementById("commentaire").innerText='Cette grille est perdue'}
+    return grillegagnée
+}
+
+function getGrillesState() {
+    let binWon1 = "";
+    let binWon2 = "";
+    let binPlayable = "";
+
+    grilles.forEach((grille) => {
+        const state = grille.getAttribute("data-playable");
+
+        if (state === "wonby1") {
+            binWon1 += "1";
+            binWon2 += "0";
+            binPlayable += "0";
+        } else if (state === "wonby2") {
+            binWon1 += "0";
+            binWon2 += "1";
+            binPlayable += "0";
+        } else if (state === "playable") {
+            binWon1 += "0";
+            binWon2 += "0";
+            binPlayable += "1";
+        } else {
+            // cas "exaequo" ou autre
+            binWon1 += "0";
+            binWon2 += "0";
+            binPlayable += "0";
+        }
+    });
+    return {
+        joueur1: binWon1,  joueur2: binWon2,playable: binPlayable 
+    };
+}
+
+
+function checkwin(){
+    const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
+    const playability = getGrillesState();
+    var binairegagnees1=playability.joueur1;
+    var binairegagnees2=playability.joueur2;
+    var binairejouables=playability.playable;
+    var gagnant=0;
+    for (var i=0;i<winning.length;i++){
+        if (winning[i].test(binairegagnees1)==true){gagnant=1}
+        if (winning[i].test(binairegagnees2)==true){gagnant=2}
+    }
+    if (gagnant==1){htmljoueur.innerText=`Bravo !!! C'est ${noms[0]} qui a gagné !`;htmlmega.style.visibility='hidden'}
+    else if (gagnant==2){htmljoueur.innerText=`Bravo !!! C'est ${noms[1]} qui a gagné !`;htmlmega.style.visibility='hidden'}
+    else if (gagnant==0 && binairejouables=='000000000'){htmljoueur.innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie';htmlmega.style.visibility='hidden'}
+}
+
+function changercouleurnoms() {
+    if (joueuractuel === 1) {
+        joueuractuel = 2;
+        setActivePlayer(2);
+    } else if (joueuractuel === 2) {
+        joueuractuel = 1;
+        setActivePlayer(1);
+    }
 }
