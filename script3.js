@@ -135,28 +135,38 @@ function getValue() {
     chooseGrid();
 };
 
+
 function chooseGrid() {
-    for (var i=0;i<grilles.length;i++){
-        setHoverGrille(i, "grille")
-        grilles[i].addEventListener('click',function(event){
-        const target = event.target;
-        var parent=target.parentElement;
-        var indice=Arraygrilles.indexOf(parent);
-        if (canSelectGrid==1){
-            griser(indice);
-            grilleactuelle=indice;
-            console.log("Grille ", indice, " choisie")
-            // Lorsqu'on choisit pour la première fois, on supprime le texte 
-            const parent = document.getElementsByClassName("texte")[0];
-            const enfant = document.getElementById("quicommence");
-            if (parent && enfant) {parent.removeChild(enfant);}
-            coup(indice);
+  grilles.forEach((grille, i) => {
+    setHoverGrille(i, "grille");
+
+    grille.onclick = (event) => {
+
+      const clickedGrille = event.currentTarget;
+      const indice = Array.from(grilles).indexOf(clickedGrille);
+      if (canSelectGrid === 1 && clickedGrille.getAttribute("data-playable") === "playable") {
+        griser(indice);
+        grilleactuelle = indice;
+        console.log("Grille ", indice, " choisie");
+
+        // Lorsqu'on choisit pour la première fois, on supprime le texte 
+        const texteParent = document.getElementsByClassName("texte")[0];
+        const quicommence = document.getElementById("quicommence");
+        if (texteParent && quicommence) {
+          texteParent.removeChild(quicommence);
         }
-        else{console.log("Grille ", indice, " cliquée, mais une autre grille choisie avant")}
-        canSelectGrid+=0;
-    }) 
-    }
+
+        coup(indice);
+        canSelectGrid = 0;
+      } else if (clickedGrille.getAttribute("data-playable") !== "playable") {
+        console.log("Cette grille ne peut pas être jouée");
+      } else {
+        console.log("Grille ", indice, " cliquée, mais une autre grille choisie avant");
+      }
+    };
+  });
 }
+
 
 var casesjouables=[];
 var Arraycasesjouables=[];
@@ -202,10 +212,8 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
         else if (joueuractuel === 2){setPlayability("case", indice_case_global, "playedby2"); casesjouees2[indice_grille][indice_case_in_grille]=1;}
 
         for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
-        checkwin();
 
         if (checkgrille(indice_grille)==0){ //la grille n'a pas été gagnée
-            checkwin();
             griser(indice_case_in_grille);
             changercouleurnoms();
 
@@ -236,6 +244,7 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
             canSelectGrid=1;
             chooseGrid();
         }
+        checkwin();
     }
     else console.log("Tu ne peux pas jouer cette case coco")
 }

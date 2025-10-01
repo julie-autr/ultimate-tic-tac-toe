@@ -157,6 +157,85 @@ body {
     transition: background-color 0.2s ease;
 }
 
+/* Faire un popup pour les règles */
+.rules-trigger {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #123C69;
+    color: #123C69;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    z-index: 100;
+    cursor: help;
+    transition: all 0.3s ease;
+}
+
+.rules-trigger:hover {
+    background: #123C69;
+    color: white;
+}
+
+.rules-popup {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: white;
+    border: 2px solid #123C69;
+    border-radius: 15px;
+    padding: 20px;
+    width: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    color: #333;
+    text-align: left;
+}
+
+.rules-trigger:hover .rules-popup {
+    display: block;
+}
+
+.rules-popup h2 {
+    color: #123C69;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+
+.rules-popup h3 {
+    color: #AC3B61;
+    font-size: 1.1em;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.rules-popup p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.rules-popup ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.rules-popup li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+/* Pour mobile */
+@media (max-width: 768px) {
+    .rules-popup {
+        width: 90vw;
+        right: -20px;
+    }
+}
+
 /* Hover activée sur les cases d'une grille */
 [class^="grille"][data-hover="case"] .case[data-playable="playable"]:hover {
   background-color: rgba(220,220,220,0.5) !important;
@@ -167,7 +246,7 @@ body {
 }
 
 [class^="grille"][data-hover="grille"]:hover {
-  background-color: rgb(220, 220, 220);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Couleur de fond d'une grille quand elle est gagnée */ 
@@ -176,6 +255,12 @@ body {
 }
 [class^="grille"][data-playable="wonby2"] {
   background-color: #659ABD ;
+}
+
+/* Si une grille est gagnée, on enlève les lignes à l'intérieur */
+[class^="grille"][data-playable="wonby1"] .case,
+[class^="grille"][data-playable="wonby2"] .case {
+  border-color: transparent !important; 
 }
 
 /* Couleur de fond des prénoms */ 
@@ -192,7 +277,6 @@ body {
     background-color: transparent;
 }
 
-
 /* Couleur des cases */
 [class^="case"][data-playable="playedby1"]{
   background-color: #80586D;
@@ -200,6 +284,7 @@ body {
 [class^="case"][data-playable="playedby2"]{
   background-color: #659ABD;
 }
+
 
 /* Responsive */
 @media (max-width: 768px) {
