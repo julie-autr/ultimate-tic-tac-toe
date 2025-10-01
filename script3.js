@@ -213,34 +213,32 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
 
         for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
 
-        if (checkgrille(indice_grille)==0){ //la grille n'a pas été gagnée
+        // On change la couleur de la grille si elle a été gagnée 
+        if (checkgrille(indice_grille)===1){ //la grille a été gagnée
+            for (var n = 0; n < casesjouables.length; n++) {
+            let idx = Array.prototype.indexOf.call(cases, casesjouables[n]);
+            if (idx !== -1) {setPlayability("case", idx, "playedby1");}
+            } 
+        }
+        else if (checkgrille(indice_grille)===2){ //la grille a été gagnée
+            for (var n = 0; n < casesjouables.length; n++) {
+            let idx = Array.prototype.indexOf.call(cases, casesjouables[n]);
+            if (idx !== -1) {setPlayability("case", idx, "playedby2");}
+            }  
+        }
+        
+        // On envoie dans la grille associée
+        changercouleurnoms();
+        // Si elle est jouable
+        if (grilles[indice_case_in_grille].getAttribute("data-playable") === "playable"){
             griser(indice_case_in_grille);
-            changercouleurnoms();
-
-            if (grilles[indice_case_in_grille].getAttribute("data-playable") === "playable"){
-                console.log("On joue désormais dans la grille ", indice_case_in_grille)
-                grilleactuelle = indice_case_in_grille;
-                coup(indice_case_in_grille);  
-            }
-            else {
-                console.log('Le coup emmène dans une grille finie'); 
-                canSelectGrid=1;
-                chooseGrid();
-            }
-        }
-        else if (checkgrille(indice_grille)==1){
-            for (var n = 0; n < casesjouables.length; n++) {
-                let idx = Array.prototype.indexOf.call(cases, casesjouables[n]);
-                if (idx !== -1) {setPlayability("case", idx, "playedby1");}
-            }            
-            canSelectGrid=1;
-            chooseGrid();
-        }
-        else if (checkgrille(indice_grille)==2){
-            for (var n = 0; n < casesjouables.length; n++) {
-                let idx = Array.prototype.indexOf.call(cases, casesjouables[n]);
-                if (idx !== -1) {setPlayability("case", idx, "playedby2");}
-            }            
+            console.log("On joue désormais dans la grille ", indice_case_in_grille)
+            grilleactuelle = indice_case_in_grille;
+            coup(indice_case_in_grille);  
+        } 
+        // Si on a cliqué sur une grille déjà finie
+        else {
+            console.log('Le coup emmène dans une grille finie'); 
             canSelectGrid=1;
             chooseGrid();
         }
