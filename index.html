@@ -6,6 +6,40 @@
         <title>Morpion géant</title>
     </head>
     <body>
+    <!-- Menu toggle latéral -->
+    <div class="menu-toggle" id="menuToggle">
+        <div class="hamburger">☰</div>
+    </div>
+
+    <div class="side-menu" id="sideMenu">
+        <h3>Options de jeu</h3>
+        
+        <div class="option-item">
+            <p class="option-description">Contrôle des cases : gagner une grille colorie automatiquement les cases correspondantes</p>
+            <div class="option-buttons">
+                <button class="opt-btn off" data-option="1" data-state="off">OFF</button>
+                <button class="opt-btn on" data-option="1" data-state="on">ON</button>
+            </div>
+        </div>
+        
+        <div class="option-item">
+            <p class="option-description">Le joueur actuel choisit la grille adverse en cas de blocage</p>
+            <div class="option-buttons">
+                <button class="opt-btn off" data-option="2a" data-state="off">OFF</button>
+                <button class="opt-btn on" data-option="2a" data-state="on">ON</button>
+            </div>
+        </div>
+        
+        <div class="option-item">
+            <p class="option-description">L'adversaire choisit librement sa grille en cas de blocage (classique)</p>
+            <div class="option-buttons">
+                <button class="opt-btn off active" data-option="2b" data-state="off">OFF</button>
+                <button class="opt-btn on active" data-option="2b" data-state="on">ON</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="rules-trigger">
     📖 Règles
     <div class="rules-popup">
@@ -157,6 +191,6 @@
             </div>
         </div>
     </div>
-    <script src="script3.js"></script>
+    <script src="script.js"></script>
     </body>
 </html>

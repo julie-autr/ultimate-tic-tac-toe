@@ -51,9 +51,17 @@ body {
     margin: 20px 0;
 }
 
+#toDelete {
+    display: flex;
+    justify-content: center; /* centre horizontalement */
+    gap: 20px; /* espace entre les deux champs */
+    margin: 20px 0;
+}
+
 #toDelete label {
-    display: block;
-    margin-top: 10px;
+    display: flex;
+    flex-direction: column; /* label au-dessus du champ */
+    align-items: flex-start; /* aligne à gauche */
     font-weight: 600;
     color: #123C69;
 }
@@ -64,13 +72,14 @@ body {
     border: 2px solid #BAB2B5;
     border-radius: 10px;
     font-size: 1em;
-    width: 250px;
+    width: 170px;
 }
 
 /* Bouton */
 #bouton {
     background: linear-gradient(135deg, #AC3B61, #123C69);
     color: white;
+    margin: 5px 0 15px 0;
     padding: 12px 30px;
     border: none;
     border-radius: 50px;
@@ -311,3 +320,135 @@ body {
 }
 
 
+
+
+/* -------------------Options de jeu------------------*/
+/* Menu toggle hamburger */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #123C69;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background: #123C69;
+}
+
+.hamburger {
+    font-size: 1.8em;
+    color: #123C69;
+    transition: color 0.3s ease;
+}
+
+.menu-toggle:hover .hamburger {
+    color: white;
+}
+
+/* Menu latéral */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -350px; /* Caché par défaut */
+    width: 350px;
+    height: 100vh;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    padding: 80px 25px 25px 25px;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+}
+
+.side-menu.open {
+    left: 0; /* Visible quand ouvert */
+}
+
+.side-menu h3 {
+    color: #123C69;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Chaque option */
+.option-item {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #EEE2DC;
+    border-radius: 10px;
+}
+
+.option-description {
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+
+
+
+/* Conteneur des boutons */
+.option-buttons {
+    display: flex;
+    justify-content: center; /* centre horizontalement */
+    width: fit-content; /* s'adapte à la taille des boutons */
+    margin: auto; /* centre dans son parent */
+    border: 2px solid #BAB2B5; /* cadre commun */
+    border-radius: 8px; /* arrondi global */
+    overflow: hidden; /* coupe les coins internes */
+}
+
+/* Boutons */
+.opt-btn {
+    padding: 6px 14px; /* moins larges */
+    font-weight: 600;
+    cursor: pointer;
+    border: none; /* enlève leur propre bord */
+    transition: all 0.3s ease;
+    background: white;
+}
+
+/* OFF par défaut (rouge) */
+.opt-btn.off {
+    background: #AC3B61;
+    border-color: #AC3B61;
+    color: white;
+}
+
+/* ON par défaut (gris) */
+.opt-btn.on {
+    background: #BAB2B5;
+    border-color: #BAB2B5;
+    color: white;
+}
+
+/* OFF actif (devient gris) */
+.opt-btn.off.active {
+    background: #BAB2B5;
+    border-color: #BAB2B5;
+    color: white;
+}
+
+/* ON actif (devient rouge) */
+.opt-btn.on.active {
+    background: #AC3B61;
+    border-color: #AC3B61;
+    color: white;
+}
+
+/* Hover pour feedback */
+.opt-btn:hover {
+    opacity: 0.8;
+}
