@@ -243,10 +243,6 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
     const indice_case_in_grille = Array.from(parent.children).indexOf(target);
     // L'indice de la case dans la grille est l'indice de la grille suivante
 
-    console.log("Variable grille actuelle = ", grilleactuelle);
-    console.log("Indice_grille récupéré = ", indice_grille);
-    console.log("target.getAttribute(data-playable)", target.getAttribute("data-playable"))
-
     if (grilleactuelle==indice_grille && target.getAttribute("data-playable") === "playable"){
         console.log("On peut jouer cette case")
         joueespargrille[indice_grille]+=1;
@@ -275,9 +271,9 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
         }
         
         // On envoie dans la grille associée
-        changercouleurnoms();
         // Si elle est jouable
         if (grilles[indice_case_in_grille].getAttribute("data-playable") === "playable"){
+            changercouleurnoms();
             griser(indice_case_in_grille);
             console.log("On joue désormais dans la grille ", indice_case_in_grille)
             grilleactuelle = indice_case_in_grille;
@@ -285,14 +281,25 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
         } 
         // Si on a cliqué sur une grille déjà finie
         else {
-            if (ruleMode = "2b"){
+            if (ruleMode === "2b"){
+            changercouleurnoms();
             console.log('Le coup emmène dans une grille finie'); 
             canSelectGrid=1;
             chooseGrid((indice) => {
             coup(indice);
             });
-
-            } else {console.log("J'ai pas encore codé cette éventualité")}
+            } 
+            else if (ruleMode === "2a") {
+            console.log('Le coup emmène dans une grille finie'); 
+            canSelectGrid=1;
+            chooseGrid((indice) => {
+            changercouleurnoms();
+            coup(indice);
+            });
+            }
+            else if (ruleMode === "1") {
+                console.log("Pas encore codé cette éventualité")
+            }
         }
         checkwin();
     }
