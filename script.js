@@ -9,7 +9,7 @@ const htmlmega=document.getElementsByClassName("megagrille")[0];
 
 // -------------------------------------------------------------------Menu des options et gestion des options 
 // Variable pour stocker le mode de jeu (2b par défaut)
-let ruleMode = "1"; 
+let ruleMode = "2b"; 
 // Toggle du menu
 const menuToggle = document.getElementById('menuToggle');
 const sideMenu = document.getElementById('sideMenu');
@@ -64,30 +64,6 @@ let noms=[];
 var joueuractuel=0;
 var grilleactuelle = 150;
 
-// pour vérifier si la méga grille est un multiple de 3 (pour que les sous-grilles soient exactement de la même taille)
-function estMultipleDeTrois(nombre){
-    if (Number.isInteger(nombre/3)){return true};
-    return false
-}
-// pour ajouter dans le css la hauteur des cases au chargement et quand on recadre la page pour que ce soit des carrés responsive
-var bigwidth=2*window.innerWidth/5;
-window.addEventListener('resize', () => {
-    bigwidth=2*window.innerWidth/5; console.log(bigwidth);
-    for (var i=0;i<3;i++){
-        if (estMultipleDeTrois(bigwidth+i)==true){console.log("ok",i,bigwidth+i),megagrille.style.setProperty('width',`${bigwidth+i}px`)}
-    };
-    const width = cases[0].offsetWidth;
-    for (var i=0;i<grilles.length;i++){grilles[i].style.setProperty('grid-auto-rows', `${width}px`)};  
-});
-window.addEventListener('load', () => {
-    for (var i=0;i<3;i++){
-        if (estMultipleDeTrois(bigwidth+i)==true){console.log("ok",bigwidth+i),megagrille.style.setProperty('width',`${bigwidth+i}px`)}
-        else {megagrille.style.setProperty('width',`${Math.floor(bigwidth)}px`)}
-    };
-    const width = cases[0].offsetWidth;
-    for (var i=0;i<grilles.length;i++){grilles[i].style.setProperty('grid-auto-rows', `${width}px`)
-};  
-});
 
 // pour que le bouton "Valider" ne soit pas cliquable si les noms ne sont pas renseignés
 function manage() {
@@ -160,8 +136,7 @@ function getValue() {
     var nom1 = document.getElementById("in1").value;
     var nom2 = document.getElementById("in2").value;
     console.log(nom1,nom2); noms.push(nom1); noms.push(nom2);
-    document.getElementById("toDelete").style.display='none';
-    // Choisir qui commence
+    document.getElementById("toDelete").style.display = "none";     // Choisir qui commence
     let nb=Math.random();
     if (nb > 0.5) {
         document.getElementById("quicommence").innerText = `C'est ${noms[0]} qui commence !`;
@@ -174,8 +149,10 @@ function getValue() {
     }
     document.getElementById("joueur").innerHTML
     // Afficher la grille et les autres trucs
-    document.getElementsByClassName("megagrille")[0].style.visibility='visible';
-    document.getElementById("joueur").style.visibility='visible';
+    document.querySelector(".megagrille").style.display = "block";
+    void document.querySelector(".megagrille").offsetHeight;
+
+    document.getElementById("joueur").style.display = "flex";    
     document.getElementsByClassName("joueur1")[0].innerText=noms[0]; document.getElementsByClassName("joueur2")[0].innerText=noms[1];
     chooseGrid((indice) => {
     coup(indice);
@@ -200,7 +177,7 @@ function chooseGrid(callback) {
         const texteParent = document.getElementsByClassName("texte")[0];
         const quicommence = document.getElementById("quicommence");
         if (texteParent && quicommence) {
-          texteParent.removeChild(quicommence);
+          quicommence.style.display = "none";
         }
 
         canSelectGrid = 0;
@@ -399,9 +376,9 @@ function checkwin(){
         if (winning[i].test(binairegagnees1)==true){gagnant=1}
         if (winning[i].test(binairegagnees2)==true){gagnant=2}
     }
-    if (gagnant==1){htmljoueur.innerText=`Bravo !!! C'est ${noms[0]} qui a gagné !`;htmlmega.style.visibility='hidden'}
-    else if (gagnant==2){htmljoueur.innerText=`Bravo !!! C'est ${noms[1]} qui a gagné !`;htmlmega.style.visibility='hidden'}
-    else if (gagnant==0 && binairejouables=='000000000'){htmljoueur.innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie';htmlmega.style.visibility='hidden'}
+    if (gagnant==1){htmljoueur.innerText=`Bravo !!! C'est ${noms[0]} qui a gagné !`;htmlmega.style.display = "none";}
+    else if (gagnant==2){htmljoueur.innerText=`Bravo !!! C'est ${noms[1]} qui a gagné !`;htmlmega.style.display = "none";}
+    else if (gagnant==0 && binairejouables=='000000000'){htmljoueur.innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie';htmlmega.style.display = "none";}
 }
 
 function changercouleurnoms() {
@@ -412,4 +389,49 @@ function changercouleurnoms() {
         joueuractuel = 1;
         setActivePlayer(1);
     }
+}
+
+
+function restartGame() {
+    // Réinitialiser les variables de jeu
+    joueuractuel = 0;
+    grilleactuelle = 150;
+    canSelectGrid = 1;
+
+    // Réinitialiser les tableaux des coups
+    joueespargrille = [0,0,0,0,0,0,0,0,0];
+    casesjouees1 = Array(9).fill().map(() => Array(9).fill(0));
+    casesjouees2 = Array(9).fill().map(() => Array(9).fill(0));
+
+    // Réinitialiser les grilles et les cases
+    grilles.forEach((grille, i) => {
+        setPlayability("grille", i, "playable");
+        Array.from(grille.children).forEach((c, j) => {
+            setPlayability("case", Array.from(cases).indexOf(c), "playable");
+        });
+        setHoverGrille(i, "none");
+    });
+
+    // Réinitialiser le DOM
+    htmljoueur.innerText = "";
+    htmlmega.style.display = "block";
+    document.getElementById("quicommence").style.display = "none";
+    
+    // Remettre à zéro le menu des noms
+    noms = [];
+    document.getElementById("in1").value = "";
+    document.getElementById("in2").value = "";
+    document.getElementById("bouton").disabled = true;
+
+    // Réinitialiser les couleurs des joueurs
+    setActivePlayer(1); // On peut choisir qui commence par défaut
+
+    document.getElementById("toDelete").style.display = "flex";
+    document.getElementById("quicommence").textContent = "";
+    document.getElementById("commentaire").textContent = "";
+    htmlmega.style.display = "none";
+    htmljoueur.style.display = "none";
+
+
+    console.log("Partie réinitialisée !");
 }

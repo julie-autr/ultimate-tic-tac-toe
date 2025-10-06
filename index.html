@@ -17,8 +17,8 @@
         <div class="option-item">
             <p class="option-description">1 : Contrôle des cases : gagner une grille colorie automatiquement les cases correspondantes</p>
             <div class="option-buttons">
-                <button class="opt-btn off active" data-option="1" data-state="off">OFF</button>
-                <button class="opt-btn on active" data-option="1" data-state="on">ON</button>
+                <button class="opt-btn off" data-option="1" data-state="off">OFF</button>
+                <button class="opt-btn on" data-option="1" data-state="on">ON</button>
             </div>
         </div>
         
@@ -33,8 +33,8 @@
         <div class="option-item">
             <p class="option-description">2b : L'adversaire choisit librement sa grille en cas de blocage (classique)</p>
             <div class="option-buttons">
-                <button class="opt-btn off" data-option="2b" data-state="off">OFF</button>
-                <button class="opt-btn on" data-option="2b" data-state="on">ON</button>
+                <button class="opt-btn off active" data-option="2b" data-state="off">OFF</button>
+                <button class="opt-btn on active" data-option="2b" data-state="on">ON</button>
             </div>
         </div>
     </div>
@@ -69,13 +69,15 @@
             <input type="text" placeholder="Pierre" id="in1" onkeyup="manage()">
             <label >Nom du joueur 2:</label>
             <input type="text" placeholder="Paul" id="in2" onkeyup="manage()">
-            <button type="button" onclick="getValue();" disabled id="bouton">Valider</button>            
+            <button type="button" onclick="getValue();" disabled id="bouton">Valider</button>   
         </div>
-        <div id="quicommence"></div>
-        <div id="joueur"><p class="joueur1"></p><div class="separateurhor"></div><p class="joueur2"></p></div>
+        <div id="joueur">
+            <p class="joueur1"></p>
+            <div id="quicommence"></div>
+            <p class="joueur2"></p>
+        </div>        
         <div id="commentaire"></div>
     </div>
-    <div class="quicommence"></div>
     <div class="megagrille">
         <div class="ligne1">
             <div class="grille1">

@@ -47,9 +47,7 @@ body {
 }
 
 /* Formulaire noms */
-#toDelete {
-    margin: 20px 0;
-}
+
 
 #toDelete {
     display: flex;
@@ -102,11 +100,26 @@ body {
 
 /* Affichage joueurs */
 #joueur {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-    visibility: hidden;
+  display: none;
+  align-items: center;
+  justify-content: space-between; /* noms aux extrémités */
+  width: 100%;
+  max-width: 600px;               /* largeur totale du bloc */
+  margin: 20px auto;
+  position: relative;             /* pour centrer quicommence */
+  padding: 0 10px;                /* léger espace latéral */
 }
+
+#joueur p {
+  font-weight: 600;
+  font-size: 1.1em;
+  color: #123C69;
+  text-align: center;
+  min-width: 100px;               /* largeur raisonnable */
+  max-width: 150px;               /* empêche que ça s’étire */
+  flex-shrink: 0;                 /* empêche de se comprimer */
+}
+
 
 [class^=joueur] {
     padding: 15px 25px;
@@ -119,6 +132,18 @@ body {
     transition: all 0.3s ease;
 }
 
+#quicommence {
+  position: absolute;              /* placé par-dessus au centre */
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 600;
+  font-size: 1.1em;
+  color: #123C69;
+  text-align: center;
+  pointer-events: none;            /* ne bloque pas les clics */
+  min-width: 180px;                /* réserve l’espace même s’il est caché */
+}
+
 #quicommence, #commentaire {
     margin: 15px 0;
     font-weight: 600;
@@ -126,10 +151,40 @@ body {
     color: #123C69;
 }
 
-/* Méga grille */
-.megagrille {
-    visibility: hidden;
+.texte {
+    padding-bottom: 0px;
 }
+#commentaire:empty {
+    margin: 0;
+}
+#quicommence:empty {
+    margin: 0;
+}
+
+/* ------------------------- */
+.megagrille {
+  aspect-ratio: 1 / 1;
+  width: min(90vmin, 500px);
+  max-width: 60%;
+  margin: auto;
+  display: none;
+}
+
+.megagrille.show {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 8px;
+}
+
+[class^="grille"] {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+/* ------------------------- */
+
 
 [class^=ligne] {
     display: flex;
@@ -164,6 +219,7 @@ body {
     background-color: transparent;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    aspect-ratio: 1 / 1; 
 }
 
 /* Faire un popup pour les règles */
