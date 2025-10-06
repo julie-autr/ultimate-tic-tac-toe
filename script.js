@@ -9,7 +9,7 @@ const htmlmega=document.getElementsByClassName("megagrille")[0];
 
 // -------------------------------------------------------------------Menu des options et gestion des options 
 // Variable pour stocker le mode de jeu (2b par défaut)
-let ruleMode = "2b"; 
+let ruleMode = "1"; 
 // Toggle du menu
 const menuToggle = document.getElementById('menuToggle');
 const sideMenu = document.getElementById('sideMenu');
@@ -298,7 +298,14 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
             });
             }
             else if (ruleMode === "1") {
-                console.log("Pas encore codé cette éventualité")
+            // Normalement, c'est TRES peu probable : 
+            // que si indice_grille = indice_case_in_grille au moment où la grille est finie... 
+            // Dans ce cas, c'est l'adversaire qui choisit nsm 
+            changercouleurnoms();
+            canSelectGrid=1;
+            chooseGrid((indice) => {
+            coup(indice);
+            });
             }
         }
         checkwin();
@@ -319,11 +326,32 @@ function checkgrille(indice){ //g indice de la grille qu'on teste
     var enfants=grilles[indice].children;
     if (grillegagnée==1){
         setPlayability("grille", indice, "wonby1")
+        if (ruleMode === "1") {
+            grilles.forEach(g => {
+            const casesDansGrille = g.querySelectorAll('.case'); // ou g.children si tu es sûr que ce sont uniquement des .case
+            const cible = casesDansGrille[indice];
+
+            if (cible.getAttribute('data-playable') === 'playable') {
+            cible.setAttribute('data-playable', `playedby${joueuractuel}`);
+            }
+        });
+        }
     }
     else if (grillegagnée==2){
         setPlayability("grille", indice, "wonby2")
+        if (ruleMode === "1") {
+            grilles.forEach(g => {
+            const casesDansGrille = g.querySelectorAll('.case'); // ou g.children si tu es sûr que ce sont uniquement des .case
+            const cible = casesDansGrille[indice];
+
+            if (cible.getAttribute('data-playable') === 'playable') {
+            cible.setAttribute('data-playable', `playedby${joueuractuel}`);
+            }
+        });
+        }
     }
     else if (joueespargrille[indice]==9&&grillegagnée==0){setPlayability("grille", indice, "exaequo");document.getElementById("commentaire").innerText='Cette grille est perdue'}
+
     return grillegagnée
 }
 
