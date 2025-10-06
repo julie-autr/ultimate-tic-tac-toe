@@ -63,7 +63,6 @@
 </div>
     <div class="texte">
         <h1>Morpion géant</h1>
-        <div class="separateurhor"></div>
         <div id="toDelete">
             <label >Nom du joueur 1:</label>
             <input type="text" placeholder="Pierre" id="in1" onkeyup="manage()">
@@ -72,11 +71,22 @@
             <button type="button" onclick="getValue();" disabled id="bouton">Valider</button>   
         </div>
         <div id="joueur">
-            <p class="joueur1"></p>
-            <div id="quicommence"></div>
-            <p class="joueur2"></p>
-        </div>        
-        <div id="commentaire"></div>
+            <div class="joueur-case" id="joueurActif">
+                <p class="joueur1 player"></p>
+                <p class="joueur2 player"></p>
+            </div>
+            <div class="joueur-case" id="commentaires">
+                <div id="quicommence"></div>
+                <div id="commentaire"></div>
+            </div>
+            <div class="joueur-case" id="recommencer">
+                <button id="resetBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
     </div>
     <div class="megagrille">
         <div class="ligne1">
@@ -193,6 +203,16 @@
             </div>
         </div>
     </div>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <p class="modal-message" id="modalMessage"></p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-yes" id="modalYes">Oui</button>
+                <button class="modal-btn modal-btn-no" id="modalNo">Non</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     </body>
 </html>

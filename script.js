@@ -391,47 +391,92 @@ function changercouleurnoms() {
     }
 }
 
+document.getElementById('resetBtn').addEventListener('click', restartGame);
+async function restartGame() {
 
-function restartGame() {
+    const confirmation = await showConfirmModal("Voulez-vous vraiment recommencer la partie ?");
+    
+    if (!confirmation) {
+        console.log("Redémarrage annulé");
+        return; // L'utilisateur a cliqué sur Non
+    }
     // Réinitialiser les variables de jeu
     joueuractuel = 0;
     grilleactuelle = 150;
     canSelectGrid = 1;
-
+    
     // Réinitialiser les tableaux des coups
     joueespargrille = [0,0,0,0,0,0,0,0,0];
     casesjouees1 = Array(9).fill().map(() => Array(9).fill(0));
     casesjouees2 = Array(9).fill().map(() => Array(9).fill(0));
-
+    
     // Réinitialiser les grilles et les cases
     grilles.forEach((grille, i) => {
         setPlayability("grille", i, "playable");
         Array.from(grille.children).forEach((c, j) => {
             setPlayability("case", Array.from(cases).indexOf(c), "playable");
         });
-        setHoverGrille(i, "none");
+        setHoverGrille(i, "grille");
     });
-
-    // Réinitialiser le DOM
-    htmljoueur.innerText = "";
-    htmlmega.style.display = "block";
-    document.getElementById("quicommence").style.display = "none";
     
-    // Remettre à zéro le menu des noms
-    noms = [];
-    document.getElementById("in1").value = "";
-    document.getElementById("in2").value = "";
-    document.getElementById("bouton").disabled = true;
-
-    // Réinitialiser les couleurs des joueurs
-    setActivePlayer(1); // On peut choisir qui commence par défaut
-
-    document.getElementById("toDelete").style.display = "flex";
-    document.getElementById("quicommence").textContent = "";
-    document.getElementById("commentaire").textContent = "";
-    htmlmega.style.display = "none";
-    htmljoueur.style.display = "none";
-
-
+    // Vider les commentaires
+    const commentaire = document.getElementById("commentaire");
+    if (commentaire) {
+        commentaire.textContent = "";
+    }
+    
+    // Réafficher la grille
+    htmlmega.style.display = "block";
+    
+    // Choisir qui commence
+    let nb = Math.random();
+    if (nb > 0.5) {
+        joueuractuel = 1;
+        setActivePlayer(1);
+        commentaire.innerText = `C'est ${noms[0]} qui commence !`;
+    } else {
+        joueuractuel = 2;
+        setActivePlayer(2);
+        commentaire.innerText = `C'est ${noms[1]} qui commence !`;
+    }
+    
+    // Permettre de choisir une grille pour commencer
+    chooseGrid((indice) => {
+        commentaire.innerText = ""; // Effacer le message après le premier coup
+        coup(indice);
+    });
+    
     console.log("Partie réinitialisée !");
+}
+
+function showConfirmModal(message) {
+    return new Promise((resolve) => {
+        const overlay = document.getElementById('modalOverlay');
+        const messageEl = document.getElementById('modalMessage');
+        const yesBtn = document.getElementById('modalYes');
+        const noBtn = document.getElementById('modalNo');
+        
+        // Afficher le message
+        messageEl.textContent = message;
+        overlay.classList.add('show');
+        
+        // Gérer le clic sur Oui
+        const handleYes = () => {
+            overlay.classList.remove('show');
+            yesBtn.removeEventListener('click', handleYes);
+            noBtn.removeEventListener('click', handleNo);
+            resolve(true);
+        };
+        
+        // Gérer le clic sur Non
+        const handleNo = () => {
+            overlay.classList.remove('show');
+            yesBtn.removeEventListener('click', handleYes);
+            noBtn.removeEventListener('click', handleNo);
+            resolve(false);
+        };
+        
+        yesBtn.addEventListener('click', handleYes);
+        noBtn.addEventListener('click', handleNo);
+    });
 }

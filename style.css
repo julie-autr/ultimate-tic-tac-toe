@@ -1,3 +1,6 @@
+/* ==========================
+   IMPORTS ET RESET GLOBAL
+========================== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 * {
@@ -6,6 +9,9 @@
     box-sizing: border-box;
 }
 
+/* ==========================
+   BODY & TYPOGRAPHIE
+========================== */
 body {
     background: linear-gradient(135deg, #EDC7B7 0%, #EEE2DC 100%);
     min-height: 100vh;
@@ -16,23 +22,22 @@ body {
     padding: 20px;
 }
 
-/* Section texte et règles */
+/* ==========================
+   SECTION TEXTE
+========================== */
 .texte {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 30px;
+    padding: 30px 0 0 0;
     margin-bottom: 30px;
     max-width: 800px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(186, 178, 181, 0.5);
 }
 
 .texte h1 {
     font-size: 2.5em;
     font-weight: 700;
     color: #123C69;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background: linear-gradient(135deg, #123C69, #AC3B61);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -46,38 +51,42 @@ body {
     color: #333;
 }
 
-/* Formulaire noms */
-
-
+/* ==========================
+   FORMULAIRE NOMS & BOUTON
+========================== */
 #toDelete {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 5px 0 20px 0;
     display: flex;
-    justify-content: center; /* centre horizontalement */
-    gap: 20px; /* espace entre les deux champs */
-    margin: 20px 0;
+    justify-content: center;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(186, 178, 181, 0.5);
+    max-width: 800px;
 }
 
 #toDelete label {
     display: flex;
-    flex-direction: column; /* label au-dessus du champ */
-    align-items: flex-start; /* aligne à gauche */
+    flex-direction: column;
+    align-items: flex-start;
     font-weight: 600;
     color: #123C69;
 }
 
 #toDelete input {
     padding: 10px;
-    margin: 5px 0 15px 0;
+    margin: 5px 0;
     border: 2px solid #BAB2B5;
     border-radius: 10px;
     font-size: 1em;
     width: 170px;
 }
 
-/* Bouton */
 #bouton {
     background: linear-gradient(135deg, #AC3B61, #123C69);
     color: white;
-    margin: 5px 0 15px 0;
+    margin: 5px 0;
     padding: 12px 30px;
     border: none;
     border-radius: 50px;
@@ -98,95 +107,127 @@ body {
     cursor: not-allowed;
 }
 
-/* Affichage joueurs */
+/* ==========================
+   BLOCS JOUEUR (ACTIF / COMMENTAIRES / RECOMMENCER)
+========================== */
 #joueur {
-  display: none;
-  align-items: center;
-  justify-content: space-between; /* noms aux extrémités */
-  width: 100%;
-  max-width: 600px;               /* largeur totale du bloc */
-  margin: 20px auto;
-  position: relative;             /* pour centrer quicommence */
-  padding: 0 10px;                /* léger espace latéral */
+    display: none; /* affichage dynamique */
+    justify-content: space-between;
+    align-items: stretch;
+    border-radius: 20px;
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    gap: 15px;
 }
 
-#joueur p {
-  font-weight: 600;
-  font-size: 1.1em;
-  color: #123C69;
-  text-align: center;
-  min-width: 100px;               /* largeur raisonnable */
-  max-width: 150px;               /* empêche que ça s’étire */
-  flex-shrink: 0;                 /* empêche de se comprimer */
+/* Bloc joueur actif (toggle 2 joueurs) */
+#joueurActif {
+    display: flex;
+    width: fit-content;
+    height: 50px;
+    overflow: hidden;
+    gap: 0;
 }
 
-
-[class^=joueur] {
-    padding: 15px 25px;
-    border-radius: 15px;
+#joueurActif .player {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0 20px;
+    white-space: nowrap;
+    box-sizing: border-box;
     font-weight: 600;
-    font-size: 1.1em;
-    background: #EEE2DC;
-    color: #123C69;
-    box-shadow: 0 5px 15px rgba(186, 178, 181, 0.5);
+    background-color: #EEE2DC;
+    color: #333;
     transition: all 0.3s ease;
 }
 
-#quicommence {
-  position: absolute;              /* placé par-dessus au centre */
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: 600;
-  font-size: 1.1em;
-  color: #123C69;
-  text-align: center;
-  pointer-events: none;            /* ne bloque pas les clics */
-  min-width: 180px;                /* réserve l’espace même s’il est caché */
+#joueurActif .joueur1 {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
-#quicommence, #commentaire {
-    margin: 15px 0;
-    font-weight: 600;
-    font-size: 1.1em;
-    color: #123C69;
+#joueurActif .joueur2 {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
-.texte {
-    padding-bottom: 0px;
-}
-#commentaire:empty {
-    margin: 0;
-}
-#quicommence:empty {
-    margin: 0;
+#joueurActif .player[data-active="true"] {
+    color: white;
 }
 
-/* ------------------------- */
+#joueurActif .joueur1[data-active="true"] { background-color: #80586D; }
+#joueurActif .joueur2[data-active="true"] { background-color: #659ABD; }
+
+/* Bloc commentaires */
+#commentaires {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Bouton recommencer */
+/* Bouton recommencer */
+#recommencer {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#resetBtn {
+    background: linear-gradient(135deg, #AC3B61, #123C69);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(172, 59, 97, 0.4);
+}
+
+#resetBtn:hover svg {
+    transform: rotate(180deg);
+    box-shadow: 0 8px 20px rgba(18, 60, 105, 0.6);
+}
+
+#resetBtn svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+    transition: transform 0.3s ease;
+}
+
+/* ==========================
+   GRILLES & CASES
+========================== */
 .megagrille {
-  aspect-ratio: 1 / 1;
-  width: min(90vmin, 500px);
-  max-width: 60%;
-  margin: auto;
-  display: none;
+    aspect-ratio: 1 / 1;
+    width: min(90vmin, 500px);
+    max-width: 60%;
+    margin: auto;
+    display: none;
 }
 
 .megagrille.show {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 8px;
 }
 
-[class^="grille"] {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-}
-
-/* ------------------------- */
-
-
-[class^=ligne] {
+[class^="ligne"] {
     display: flex;
 }
 
@@ -201,16 +242,14 @@ body {
     background-color: #BAB2B5;
 }
 
-/* Grilles */
-[class^=grille] {
-    width: 33.333333%;
+[class^="grille"] {
+    width: 33.333%;
     display: grid;
-    grid-template-columns: repeat(3, 33.333333%);
+    grid-template-columns: repeat(3, 33.333%);
     background-color: rgba(220,220,220,0.5);
     transition: background-color 0.3s ease;
 }
 
-/* Cases */
 .case {
     display: flex;
     justify-content: center;
@@ -219,10 +258,29 @@ body {
     background-color: transparent;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    aspect-ratio: 1 / 1; 
+    aspect-ratio: 1 / 1;
 }
 
-/* Faire un popup pour les règles */
+/* Hover et couleurs des grilles/cases */
+[class^="grille"][data-hover="case"] .case[data-playable="playable"]:hover {
+    background-color: rgba(220,220,220,0.5) !important;
+}
+
+[class^="grille"][data-hover="case"] { background-color: #FFFFFF; }
+[class^="grille"][data-hover="grille"]:hover { background-color: rgba(255, 255, 255, 0.8); }
+
+[class^="grille"][data-playable="wonby1"] { background-color: #80586D; }
+[class^="grille"][data-playable="wonby2"] { background-color: #659ABD; }
+
+[class^="grille"][data-playable="wonby1"] .case,
+[class^="grille"][data-playable="wonby2"] .case { border-color: transparent !important; }
+
+[class^="case"][data-playable="playedby1"] { background-color: #80586D; }
+[class^="case"][data-playable="playedby2"] { background-color: #659ABD; }
+
+/* ==========================
+   POPUP REGLES
+========================== */
 .rules-trigger {
     position: fixed;
     top: 20px;
@@ -239,10 +297,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.rules-trigger:hover {
-    background: #123C69;
-    color: white;
-}
+.rules-trigger:hover { background: #123C69; color: white; }
 
 .rules-popup {
     display: none;
@@ -256,137 +311,27 @@ body {
     width: 400px;
     max-height: 70vh;
     overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     color: #333;
     text-align: left;
 }
 
-.rules-trigger:hover .rules-popup {
-    display: block;
-}
+.rules-trigger:hover .rules-popup { display: block; }
 
-.rules-popup h2 {
-    color: #123C69;
-    font-size: 1.3em;
-    margin-bottom: 15px;
-}
+.rules-popup h2 { color: #123C69; font-size: 1.3em; margin-bottom: 15px; }
+.rules-popup h3 { color: #AC3B61; font-size: 1.1em; margin: 15px 0 10px 0; }
+.rules-popup p, .rules-popup li { margin-bottom: 10px; line-height: 1.5; }
 
-.rules-popup h3 {
-    color: #AC3B61;
-    font-size: 1.1em;
-    margin-top: 15px;
-    margin-bottom: 10px;
-}
-
-.rules-popup p {
-    margin-bottom: 10px;
-    line-height: 1.5;
-}
-
-.rules-popup ul {
-    margin-left: 20px;
-    margin-bottom: 10px;
-}
-
-.rules-popup li {
-    margin-bottom: 8px;
-    line-height: 1.5;
-}
-
-/* Pour mobile */
-@media (max-width: 768px) {
-    .rules-popup {
-        width: 90vw;
-        right: -20px;
-    }
-}
-
-/* Hover activée sur les cases d'une grille */
-[class^="grille"][data-hover="case"] .case[data-playable="playable"]:hover {
-  background-color: rgba(220,220,220,0.5) !important;
-}
-
-[class^="grille"][data-hover="case"] {
-  background-color: #FFFFFF ;
-}
-
-[class^="grille"][data-hover="grille"]:hover {
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-/* Couleur de fond d'une grille quand elle est gagnée */ 
-[class^="grille"][data-playable="wonby1"] {
-  background-color: #80586D ;
-}
-[class^="grille"][data-playable="wonby2"] {
-  background-color: #659ABD ;
-}
-
-/* Si une grille est gagnée, on enlève les lignes à l'intérieur */
-[class^="grille"][data-playable="wonby1"] .case,
-[class^="grille"][data-playable="wonby2"] .case {
-  border-color: transparent !important; 
-}
-
-/* Couleur de fond des prénoms */ 
-.joueur1[data-active="true"] {
-    background-color: #80586D;
-}
-
-.joueur2[data-active="true"] {
-    background-color: #659ABD;
-}
-
-.joueur1[data-active="false"],
-.joueur2[data-active="false"] {
-    background-color: transparent;
-}
-
-/* Couleur des cases */
-[class^="case"][data-playable="playedby1"]{
-  background-color: #80586D;
-}
-[class^="case"][data-playable="playedby2"]{
-  background-color: #659ABD;
-}
-
-
-/* Responsive */
-@media (max-width: 768px) {
-    .texte {
-        padding: 20px;
-    }
-    
-    .texte h1 {
-        font-size: 2em;
-    }
-    
-    .texte p {
-        font-size: 0.9em;
-    }
-    
-    #toDelete input {
-        width: 200px;
-    }
-    
-    #joueur {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
-
-
-
-/* -------------------Options de jeu------------------*/
-/* Menu toggle hamburger */
+/* ==========================
+   OPTIONS DE JEU / MENU
+========================== */
 .menu-toggle {
     position: fixed;
     top: 20px;
     left: 20px;
     width: 50px;
     height: 50px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255,255,255,0.9);
     border: 2px solid #123C69;
     border-radius: 10px;
     display: flex;
@@ -397,114 +342,137 @@ body {
     transition: all 0.3s ease;
 }
 
-.menu-toggle:hover {
-    background: #123C69;
-}
+.menu-toggle:hover { background: #123C69; }
+.menu-toggle .hamburger { font-size: 1.8em; color: #123C69; transition: color 0.3s ease; }
+.menu-toggle:hover .hamburger { color: white; }
 
-.hamburger {
-    font-size: 1.8em;
-    color: #123C69;
-    transition: color 0.3s ease;
-}
-
-.menu-toggle:hover .hamburger {
-    color: white;
-}
-
-/* Menu latéral */
 .side-menu {
     position: fixed;
     top: 0;
-    left: -350px; /* Caché par défaut */
+    left: -350px;
     width: 350px;
     height: 100vh;
     background: white;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
     z-index: 999;
     padding: 80px 25px 25px 25px;
     transition: left 0.3s ease;
     overflow-y: auto;
 }
 
-.side-menu.open {
-    left: 0; /* Visible quand ouvert */
-}
+.side-menu.open { left: 0; }
+.side-menu h3 { color: #123C69; font-size: 1.5em; margin-bottom: 20px; text-align: center; }
 
-.side-menu h3 {
-    color: #123C69;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    text-align: center;
-}
+.option-item { margin-bottom: 25px; padding: 15px; background: #EEE2DC; border-radius: 10px; }
+.option-description { font-size: 0.9em; color: #333; margin-bottom: 10px; line-height: 1.4; }
 
-/* Chaque option */
-.option-item {
-    margin-bottom: 25px;
-    padding: 15px;
-    background: #EEE2DC;
-    border-radius: 10px;
-}
-
-.option-description {
-    font-size: 0.9em;
-    color: #333;
-    margin-bottom: 10px;
-    line-height: 1.4;
-}
-
-
-
-
-/* Conteneur des boutons */
 .option-buttons {
     display: flex;
-    justify-content: center; /* centre horizontalement */
-    width: fit-content; /* s'adapte à la taille des boutons */
-    margin: auto; /* centre dans son parent */
-    border: 2px solid #BAB2B5; /* cadre commun */
-    border-radius: 8px; /* arrondi global */
-    overflow: hidden; /* coupe les coins internes */
+    justify-content: center;
+    width: fit-content;
+    margin: auto;
+    border: 2px solid #BAB2B5;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-/* Boutons */
 .opt-btn {
-    padding: 6px 14px; /* moins larges */
+    padding: 6px 14px;
     font-weight: 600;
     cursor: pointer;
-    border: none; /* enlève leur propre bord */
+    border: none;
     transition: all 0.3s ease;
     background: white;
 }
 
-/* OFF par défaut (rouge) */
-.opt-btn.off {
-    background: #AC3B61;
-    border-color: #AC3B61;
-    color: white;
+.opt-btn.off { background: #AC3B61; border-color: #AC3B61; color: white; }
+.opt-btn.on { background: #BAB2B5; border-color: #BAB2B5; color: white; }
+.opt-btn.off.active { background: #BAB2B5; border-color: #BAB2B5; color: white; }
+.opt-btn.on.active { background: #AC3B61; border-color: #AC3B61; color: white; }
+
+.opt-btn:hover { opacity: 0.8; }
+
+/* ==========================
+   RESPONSIVE
+========================== */
+@media (max-width: 768px) {
+    .texte { padding: 20px; }
+    .texte h1 { font-size: 2em; }
+    .texte p { font-size: 0.9em; }
+    #toDelete input { width: 200px; }
+    #joueur { flex-direction: column; gap: 10px; }
+    .rules-popup { width: 90vw; right: -20px; }
 }
 
-/* ON par défaut (gris) */
-.opt-btn.on {
+
+/* ==========================
+   MODAL D'AVERTISSEMENT
+========================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-box {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 400px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.modal-message {
+    font-size: 1.2em;
+    color: #123C69;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-btn-yes {
+    background: linear-gradient(135deg, #AC3B61, #123C69);
+    color: white;
+    box-shadow: 0 5px 15px rgba(172, 59, 97, 0.4);
+}
+
+.modal-btn-yes:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(18, 60, 105, 0.6);
+}
+
+.modal-btn-no {
     background: #BAB2B5;
-    border-color: #BAB2B5;
     color: white;
 }
 
-/* OFF actif (devient gris) */
-.opt-btn.off.active {
-    background: #BAB2B5;
-    border-color: #BAB2B5;
-    color: white;
-}
-
-/* ON actif (devient rouge) */
-.opt-btn.on.active {
-    background: #AC3B61;
-    border-color: #AC3B61;
-    color: white;
-}
-
-/* Hover pour feedback */
-.opt-btn:hover {
-    opacity: 0.8;
+.modal-btn-no:hover {
+    background: #9a9496;
 }
