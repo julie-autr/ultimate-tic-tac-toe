@@ -27,7 +27,6 @@ body {
 ========================== */
 .texte {
     padding: 30px 0 0 0;
-    margin-bottom: 30px;
     max-width: 800px;
     width: 90%;
     text-align: center;
@@ -216,7 +215,6 @@ body {
     aspect-ratio: 1 / 1;
     width: min(90vmin, 500px);
     max-width: 60%;
-    margin: auto;
     display: none;
 }
 
@@ -278,75 +276,85 @@ body {
 [class^="case"][data-playable="playedby1"] { background-color: #80586D; }
 [class^="case"][data-playable="playedby2"] { background-color: #659ABD; }
 
+
+/* ==========================
+   BOUTONS DE GAUCHE
+========================== */
+/* Conteneur des deux boutons */
+.top-left-buttons {
+  display: flex;
+  flex-direction: column; /* empile les boutons verticalement */
+  gap: 10px;              /* espace entre les boutons */
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.top-left-buttons > div {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #AC3B61, #123C69); /* même dégradé que #bouton */
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(172, 59, 97, 0.4); /* pour rappeler le style du bouton Valider */
+}
+
+.top-left-buttons button {
+  background: transparent;  /* on garde le fond du parent visible */
+  border: none;              /* pas de cadre */
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.top-left-buttons > div:hover {
+  background: #123C69;
+}
+
+.top-left-buttons > div svg {
+  width: 20px;
+  height: 20px;
+  fill: white; /* icône blanche par défaut */
+  transition: transform 0.3s ease;
+}
+
+.top-left-buttons > div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(18, 60, 105, 0.6);
+}
+
+
 /* ==========================
    POPUP REGLES
 ========================== */
-.rules-trigger {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid #123C69;
-    color: #123C69;
-    padding: 10px 20px;
-    border-radius: 12px;
-    font-size: 1em;
-    font-weight: 600;
-    z-index: 100;
-    cursor: help;
-    transition: all 0.3s ease;
+.rules-toggle:hover {
+    background: #123C69;
 }
 
-.rules-trigger:hover { background: #123C69; color: white; }
-
-.rules-popup {
-    display: none;
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background: white;
-    border: 2px solid #123C69;
-    border-radius: 15px;
-    padding: 20px;
-    width: 400px;
-    max-height: 70vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    color: #333;
-    text-align: left;
+.rules-toggle svg {
+    width: 26px;
+    height: 26px;
+    fill: #123C69;
+    transition: fill 0.3s ease;
 }
 
-.rules-trigger:hover .rules-popup { display: block; }
-
-.rules-popup h2 { color: #123C69; font-size: 1.3em; margin-bottom: 15px; }
-.rules-popup h3 { color: #AC3B61; font-size: 1.1em; margin: 15px 0 10px 0; }
-.rules-popup p, .rules-popup li { margin-bottom: 10px; line-height: 1.5; }
-
-/* ==========================
-   OPTIONS DE JEU / MENU
-========================== */
-.menu-toggle {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 50px;
-    height: 50px;
-    background: rgba(255,255,255,0.9);
-    border: 2px solid #123C69;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    z-index: 1000;
-    transition: all 0.3s ease;
+.rules-toggle:hover svg {
+    fill: white;
 }
 
-.menu-toggle:hover { background: #123C69; }
-.menu-toggle .hamburger { font-size: 1.8em; color: #123C69; transition: color 0.3s ease; }
-.menu-toggle:hover .hamburger { color: white; }
 
-.side-menu {
+.side-menu-rules {
     position: fixed;
     top: 0;
     left: -350px;
@@ -360,11 +368,64 @@ body {
     overflow-y: auto;
 }
 
-.side-menu.open { left: 0; }
-.side-menu h3 { color: #123C69; font-size: 1.5em; margin-bottom: 20px; text-align: center; }
+.side-menu-rules.open { left: 0; }
 
-.option-item { margin-bottom: 25px; padding: 15px; background: #EEE2DC; border-radius: 10px; }
-.option-description { font-size: 0.9em; color: #333; margin-bottom: 10px; line-height: 1.4; }
+/* ==========================
+   OPTIONS DE JEU / MENU
+========================== */
+
+.menu-toggle:hover {
+    background: #123C69;
+}
+
+.menu-toggle svg {
+    width: 26px;
+    height: 26px;
+    fill: #123C69;
+    transition: fill 0.3s ease;
+}
+
+.menu-toggle:hover svg {
+    fill: white;
+}
+
+
+.side-menu-option {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 350px;
+    height: 100vh;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    z-index: 999;
+    padding: 80px 25px 25px 25px;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+}
+
+.side-menu-option.open { left: 0; }
+
+.side-menu-option h3 {
+    color: #123C69;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.option-item {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #EEE2DC;
+    border-radius: 10px;
+}
+
+.option-description {
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
 
 .option-buttons {
     display: flex;
@@ -392,6 +453,7 @@ body {
 
 .opt-btn:hover { opacity: 0.8; }
 
+
 /* ==========================
    RESPONSIVE
 ========================== */
@@ -401,7 +463,7 @@ body {
     .texte p { font-size: 0.9em; }
     #toDelete input { width: 200px; }
     #joueur { flex-direction: column; gap: 10px; }
-    .rules-popup { width: 90vw; right: -20px; }
+    .side-menu-rules { width: 90vw; right: -20px; }
 }
 
 

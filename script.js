@@ -10,31 +10,60 @@ const htmlmega=document.getElementsByClassName("megagrille")[0];
 // -------------------------------------------------------------------Menu des options et gestion des options 
 // Variable pour stocker le mode de jeu (2b par défaut)
 let ruleMode = "2b"; 
-// Toggle du menu
-const menuToggle = document.getElementById('menuToggle');
-const sideMenu = document.getElementById('sideMenu');
 
-menuToggle.addEventListener('click', () => {
-    sideMenu.classList.toggle('open');
+// --- Toggle du menu d'options ---
+const optionsBtn = document.getElementById('menuToggle');
+const sideMenuOptions = document.getElementById('sideMenuOption');
+
+// --- Toggle des règles ---
+const rulesBtn = document.getElementById('rulesBtn');
+const sideMenuRules = document.getElementById('sideMenuRules');
+
+optionsBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); 
+    // Fermer l'autre menu si ouvert
+    sideMenuRules.classList.remove('open');
+    sideMenuOptions.classList.toggle('open');
 });
 
-// Fermer le menu si on clique en dehors
+rulesBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    // Fermer l'autre menu si ouvert
+    sideMenuOptions.classList.remove('open');
+    sideMenuRules.classList.toggle('open');
+});
+
+// Fermer les menus si clic à l'extérieur
 document.addEventListener('click', (e) => {
-    if (!sideMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-        sideMenu.classList.remove('open');
+    if (!sideMenuOptions.contains(e.target) && !optionsBtn.contains(e.target)) {
+        sideMenuOptions.classList.remove('open');
+    }
+    if (!sideMenuRules.contains(e.target) && !rulesBtn.contains(e.target)) {
+        sideMenuRules.classList.remove('open');
     }
 });
+
+
+
 
 // Gestion des boutons d'options
 const optionButtons = document.querySelectorAll('.opt-btn');
 
 optionButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
+    button.addEventListener('click', async (e) => {
         const clickedOption = e.target.getAttribute('data-option');
         const clickedState = e.target.getAttribute('data-state');
-        
+
         // Si on clique sur un bouton ON
         if (clickedState === 'on') {
+
+            // On demande confirmation AVANT de changer quoi que ce soit
+            const confirmation = await showConfirmModal("Changer de mode va réinitialiser la partie. Continuer ?");
+            if (!confirmation) {
+                console.log("Changement de mode annulé");
+                return; // Stoppe ici, rien ne change
+            }
+
             // Désactiver tous les boutons
             optionButtons.forEach(btn => btn.classList.remove('active'));
             
@@ -47,9 +76,13 @@ optionButtons.forEach(button => {
             // Mettre à jour le mode de jeu
             ruleMode = clickedOption;
             console.log("Mode de jeu changé :", ruleMode);
+
+            // Redémarrer la partie
+            restartGame();
         }
     });
 });
+
 
 grilles.forEach((grille, index) => {
   setPlayability("grille", index, "playable")
@@ -391,15 +424,20 @@ function changercouleurnoms() {
     }
 }
 
-document.getElementById('resetBtn').addEventListener('click', restartGame);
-async function restartGame() {
+document.getElementById("resetBtn").addEventListener("click", () => {
+  askAndRestart("Souhaitez-vous vraiment recommencer une nouvelle partie ?");
+});
 
-    const confirmation = await showConfirmModal("Voulez-vous vraiment recommencer la partie ?");
-    
+async function askAndRestart(message){
+    const confirmation = await showConfirmModal(message);
     if (!confirmation) {
         console.log("Redémarrage annulé");
         return; // L'utilisateur a cliqué sur Non
     }
+    restartGame();
+}
+
+function restartGame() {
     // Réinitialiser les variables de jeu
     joueuractuel = 0;
     grilleactuelle = 150;
