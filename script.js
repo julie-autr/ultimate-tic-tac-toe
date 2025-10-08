@@ -5,6 +5,7 @@ const megagrille=document.querySelector('.megagrille')
 
 const htmljoueur=document.getElementById("joueur");
 const htmlmega=document.getElementsByClassName("megagrille")[0];
+const htmlcommentaires = document.getElementById("commentaires");
 
 
 // -------------------------------------------------------------------Menu des options et gestion des options 
@@ -171,12 +172,13 @@ function getValue() {
     console.log(nom1,nom2); noms.push(nom1); noms.push(nom2);
     document.getElementById("toDelete").style.display = "none";     // Choisir qui commence
     let nb=Math.random();
+    console.log("Nombre random : ", nb)
     if (nb > 0.5) {
-        document.getElementById("quicommence").innerText = `C'est ${noms[0]} qui commence !`;
+        htmlcommentaires.innerHTML = `C'est <span class="player-name player1">${noms[0]}</span> qui commence !`;
         joueuractuel = 1;
         setActivePlayer(1);
     } else {
-        document.getElementById("quicommence").innerText = `C'est ${noms[1]} qui commence !`;
+        htmlcommentaires.innerHTML = `C'est <span class="player-name player2">${noms[1]}</span> qui commence !`;
         joueuractuel = 2;
         setActivePlayer(2);
     }
@@ -208,9 +210,8 @@ function chooseGrid(callback) {
 
         // Lorsqu'on choisit pour la première fois, on supprime le texte 
         const texteParent = document.getElementsByClassName("texte")[0];
-        const quicommence = document.getElementById("quicommence");
-        if (texteParent && quicommence) {
-          quicommence.style.display = "none";
+        if (texteParent && htmlcommentaires) {
+          htmlcommentaires.style.display = "none";
         }
 
         canSelectGrid = 0;
@@ -279,7 +280,10 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
             if (idx !== -1) {setPlayability("case", idx, "playedby2");}
             }  
         }
-        
+
+        if (checkwin()) {
+            return; // stoppe ici si victoire
+        }
         // On envoie dans la grille associée
         // Si elle est jouable
         if (grilles[indice_case_in_grille].getAttribute("data-playable") === "playable"){
@@ -318,7 +322,6 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
             });
             }
         }
-        checkwin();
     }
     else console.log("Tu ne peux pas jouer cette case coco")
 }
@@ -409,9 +412,25 @@ function checkwin(){
         if (winning[i].test(binairegagnees1)==true){gagnant=1}
         if (winning[i].test(binairegagnees2)==true){gagnant=2}
     }
-    if (gagnant==1){htmljoueur.innerText=`Bravo !!! C'est ${noms[0]} qui a gagné !`;htmlmega.style.display = "none";}
-    else if (gagnant==2){htmljoueur.innerText=`Bravo !!! C'est ${noms[1]} qui a gagné !`;htmlmega.style.display = "none";}
-    else if (gagnant==0 && binairejouables=='000000000'){htmljoueur.innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie';htmlmega.style.display = "none";}
+    if (gagnant==1){
+        console.log("1 a gagné");
+        htmlcommentaires.style.display = "flex";
+        htmlcommentaires.innerHTML=`Bravo! C'est <span class="player-name player1">${noms[0]}</span> qui a gagné !`;
+        htmlmega.style.display = "none";
+        return true}
+    else if (gagnant==2){
+        console.log("2 a gagné");
+        htmlcommentaires.style.display = "flex";
+        htmlcommentaires.innerHTML=`Bravo! C'est <span class="player-name player2">${noms[1]}</span> qui a gagné !`;
+        htmlmega.style.display = "none";
+        return true}
+    else if (gagnant==0 && binairejouables=='000000000'){
+        console.log("fin de partie, égalité");
+        htmlcommentaires.style.display = "flex";
+        htmlcommentaires.innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie';
+        htmlmega.style.display = "none";
+        return true}
+    else {return false}
 }
 
 function changercouleurnoms() {
@@ -457,10 +476,8 @@ function restartGame() {
         setHoverGrille(i, "grille");
     });
     
-    // Vider les commentaires
-    const commentaire = document.getElementById("commentaire");
-    if (commentaire) {
-        commentaire.textContent = "";
+    if (htmlcommentaires) {
+        htmlcommentaires.innerHTML = "";
     }
     
     // Réafficher la grille
@@ -471,16 +488,16 @@ function restartGame() {
     if (nb > 0.5) {
         joueuractuel = 1;
         setActivePlayer(1);
-        commentaire.innerText = `C'est ${noms[0]} qui commence !`;
+        htmlcommentaires.innerHTML = `C'est <span class="player-name player1">${noms[0]}</span> qui commence !`;
     } else {
         joueuractuel = 2;
         setActivePlayer(2);
-        commentaire.innerText = `C'est ${noms[1]} qui commence !`;
+        htmlcommentaires.innerHTML = `C'est <span class="player-name player2">${noms[1]}</span> qui commence !`;
     }
     
     // Permettre de choisir une grille pour commencer
     chooseGrid((indice) => {
-        commentaire.innerText = ""; // Effacer le message après le premier coup
+        htmlcommentaires.innerText = ""; // Effacer le message après le premier coup
         coup(indice);
     });
     

@@ -44,20 +44,25 @@
     <!-- POPUP RÈGLES (toggleable) -->
     <div class="side-menu-rules" id="sideMenuRules">
         <h2>Règles du morpion géant</h2>
-        <p>Le plateau est composé de 9 petites grilles de morpion.</p>
-        <p><strong>L'objectif ?</strong> Remporter 3 petites grilles alignées (horizontalement, verticalement ou en diagonale) afin de gagner la partie.</p>
+        <p>Le plateau est composé de 9 grilles de morpion.</p>
+        <h3>L'objectif ?</h3>
+        <p>Remporter 3 grilles alignées (horizontalement, verticalement ou en diagonale) afin de gagner la partie.</p>
 
         <h3>Déroulement d'un tour :</h3>
         <ul>
-            <li>Tu joues dans une petite grille.</li>
-            <li>La case où tu poses ton pion détermine la grille où ton adversaire devra jouer au coup suivant.</li>
+            <li>Tu joues dans une grille.</li>
+            <li>La case où tu joues détermine la grille où ton adversaire devra jouer au coup suivant.</li>
         </ul>
 
         <h3>Victoire et blocages :</h3>
         <ul>
             <li>Quand un joueur aligne 3 symboles dans une petite grille, il gagne cette grille.</li>
             <li>Si une petite grille se termine par une égalité, elle est bloquée.</li>
-            <li>Si un coup envoie l'adversaire vers une petite grille déjà terminée, il peut choisir sa grille.</li>
+            <li>
+                Si un coup envoie l'adversaire vers une petite grille déjà terminée,
+                la règle par défaut est qu’il peut choisir librement sa grille.<br>
+                (Des variantes sont disponibles dans le menu <em>Options de jeu</em>.)
+            </li>
         </ul>
     </div>
 
@@ -65,28 +70,32 @@
         <h3>Options de jeu</h3>
         
         <div class="option-item">
-            <p class="option-description">1 : Contrôle des cases : gagner une grille colorie automatiquement les cases correspondantes</p>
+            <h4>Blocage – Choix libre de l’adversaire</h4>
+            <p class="option-description">Si la grille est bloquée, l’adversaire peut choisir librement la grille où il veut jouer.</p>
+            <div class="option-buttons">
+                <button class="opt-btn off active" data-option="2b" data-state="off">OFF</button>
+                <button class="opt-btn on active" data-option="2b" data-state="on">ON</button>
+            </div>
+        </div>
+
+        <div class="option-item">
+            <h4>Blocage – Choix par le joueur actuel</h4>
+            <p class="option-description">Si la grille désignée est déjà terminée, le joueur en cours choisit où envoyer son adversaire.</p>
+            <div class="option-buttons">
+                <button class="opt-btn off" data-option="2a" data-state="off">OFF</button>
+                <button class="opt-btn on" data-option="2a" data-state="on">ON</button>
+            </div>
+        </div>
+
+        <div class="option-item">
+            <h4>Contrôle des cases</h4>
+            <p class="option-description">Gagner une grille colorie automatiquement toutes les cases qui envoient dans cette grille.</p>
             <div class="option-buttons">
                 <button class="opt-btn off" data-option="1" data-state="off">OFF</button>
                 <button class="opt-btn on" data-option="1" data-state="on">ON</button>
             </div>
         </div>
         
-        <div class="option-item">
-            <p class="option-description">2a : Le joueur actuel choisit la grille adverse en cas de blocage</p>
-            <div class="option-buttons">
-                <button class="opt-btn off" data-option="2a" data-state="off">OFF</button>
-                <button class="opt-btn on" data-option="2a" data-state="on">ON</button>
-            </div>
-        </div>
-        
-        <div class="option-item">
-            <p class="option-description">2b : L'adversaire choisit librement sa grille en cas de blocage (classique)</p>
-            <div class="option-buttons">
-                <button class="opt-btn off active" data-option="2b" data-state="off">OFF</button>
-                <button class="opt-btn on active" data-option="2b" data-state="on">ON</button>
-            </div>
-        </div>
     </div>
 
     <div class="texte">
@@ -103,10 +112,7 @@
                 <p class="joueur1 player"></p>
                 <p class="joueur2 player"></p>
             </div>
-            <div class="joueur-case" id="commentaires">
-                <div id="quicommence"></div>
-                <div id="commentaire"></div>
-            </div>
+            <div class="joueur-case" id="commentaires"></div>
             <div class="joueur-case" id="recommencer">
                 <button id="resetBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

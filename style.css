@@ -112,7 +112,7 @@ body {
 #joueur {
     display: none; /* affichage dynamique */
     justify-content: space-between;
-    align-items: stretch;
+    align-items: center;
     border-radius: 20px;
     padding: 20px;
     width: 90%;
@@ -165,12 +165,29 @@ body {
 /* Bloc commentaires */
 #commentaires {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    display: block;
     align-items: center;
     justify-content: center;
     text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    line-height: 1.5;
+    color: #333;
 }
+
+.player-name {
+    font-weight: 700;
+}
+
+/* Couleurs des prénoms par joueur */
+.player1 {
+    color: #80586D; /* même couleur que le joueur 1 */
+}
+
+.player2 {
+    color: #659ABD; /* même couleur que le joueur 2 */
+}
+
 
 /* Bouton recommencer */
 /* Bouton recommencer */
@@ -353,23 +370,25 @@ body {
     fill: white;
 }
 
-
-.side-menu-rules {
+.side-menu-rules,
+.side-menu-option {
     position: fixed;
     top: 0;
     left: -350px;
     width: 350px;
     height: 100vh;
     background: white;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-    z-index: 999;
-    padding: 80px 25px 25px 25px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.18);
+    z-index: 999;              /* > .top-left-buttons (1000) pour ne plus être caché */
+    padding: 110px 25px 25px 25px; /* plus d'espace en haut pour le titre */
     transition: left 0.3s ease;
     overflow-y: auto;
 }
 
-.side-menu-rules.open { left: 0; }
-
+.side-menu-rules.open,
+.side-menu-option.open {
+    left: 0;
+}
 /* ==========================
    OPTIONS DE JEU / MENU
 ========================== */
@@ -404,21 +423,61 @@ body {
     overflow-y: auto;
 }
 
-.side-menu-option.open { left: 0; }
 
+.side-menu-rules h2,
 .side-menu-option h3 {
-    color: #123C69;
     font-size: 1.5em;
-    margin-bottom: 20px;
+    font-weight: 700;
     text-align: center;
+    margin: 0 0 8px;
+    color: #123C69; /* fallback */
+    background: linear-gradient(135deg, #123C69, #AC3B61);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.side-menu-rules h3 {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: #123C69;
+    margin: 6px 0 6px;
+    padding-left: 14px; /* espace pour la barre décorative */
+    position: relative;
+    letter-spacing: 0.1px;
+}
+
+.side-menu-rules h3::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 62%;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #80586D, #659ABD);
 }
 
 .option-item {
     margin-bottom: 25px;
-    padding: 15px;
-    background: #EEE2DC;
-    border-radius: 10px;
+    padding: 20px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #f9f9f9, #f1e6e6);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
 }
+
+.option-item:hover {
+    transform: translateY(-3px);
+}
+
+.option-item h4 {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #123C69;
+    margin-bottom: 8px;
+}
+
 
 .option-description {
     font-size: 0.9em;
