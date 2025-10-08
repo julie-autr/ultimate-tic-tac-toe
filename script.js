@@ -414,19 +414,19 @@ function checkwin(){
     }
     if (gagnant==1){
         console.log("1 a gagné");
-        htmlcommentaires.style.display = "flex";
+        htmlcommentaires.style.display = "block";
         htmlcommentaires.innerHTML=`Bravo! C'est <span class="player-name player1">${noms[0]}</span> qui a gagné !`;
         htmlmega.style.display = "none";
         return true}
     else if (gagnant==2){
         console.log("2 a gagné");
-        htmlcommentaires.style.display = "flex";
+        htmlcommentaires.style.display = "block";
         htmlcommentaires.innerHTML=`Bravo! C'est <span class="player-name player2">${noms[1]}</span> qui a gagné !`;
         htmlmega.style.display = "none";
         return true}
     else if (gagnant==0 && binairejouables=='000000000'){
         console.log("fin de partie, égalité");
-        htmlcommentaires.style.display = "flex";
+        htmlcommentaires.style.display = "block";
         htmlcommentaires.innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie';
         htmlmega.style.display = "none";
         return true}
