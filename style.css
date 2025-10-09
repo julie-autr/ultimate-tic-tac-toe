@@ -225,6 +225,28 @@ body {
     transition: transform 0.3s ease;
 }
 
+/* Style spécial quand le bouton devient "Rejouer" */
+#resetBtn.rejouer {
+    background: linear-gradient(135deg, #AC3B61, #123C69);
+    color: white;
+    margin: 5px 0;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(172, 59, 97, 0.4);
+    transition: all 0.3s ease;
+    width: auto;
+    height: auto;
+}
+
+#resetBtn.rejouer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(18, 60, 105, 0.6);
+}
+
 /* ==========================
    GRILLES & CASES
 ========================== */

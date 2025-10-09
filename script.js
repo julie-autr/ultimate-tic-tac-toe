@@ -7,6 +7,7 @@ const htmljoueur=document.getElementById("joueur");
 const htmlmega=document.getElementsByClassName("megagrille")[0];
 const htmlcommentaires = document.getElementById("commentaires");
 
+let partieEnCours = false;
 
 // -------------------------------------------------------------------Menu des options et gestion des options 
 // Variable pour stocker le mode de jeu (2b par défaut)
@@ -57,29 +58,44 @@ optionButtons.forEach(button => {
 
         // Si on clique sur un bouton ON
         if (clickedState === 'on') {
+            if (partieEnCours){
+                // On demande confirmation AVANT de changer quoi que ce soit
+                const confirmation = await showConfirmModal("Changer de mode va réinitialiser la partie. Continuer ?");
+                if (!confirmation) {
+                    console.log("Changement de mode annulé");
+                    return; // Stoppe ici, rien ne change
+                }
 
-            // On demande confirmation AVANT de changer quoi que ce soit
-            const confirmation = await showConfirmModal("Changer de mode va réinitialiser la partie. Continuer ?");
-            if (!confirmation) {
-                console.log("Changement de mode annulé");
-                return; // Stoppe ici, rien ne change
+                // Désactiver tous les boutons
+                optionButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Activer le OFF et le ON de l'option cliquée
+                const offButton = document.querySelector(`.opt-btn.off[data-option="${clickedOption}"]`);
+                const onButton = document.querySelector(`.opt-btn.on[data-option="${clickedOption}"]`);
+                offButton.classList.add('active');
+                onButton.classList.add('active');
+                
+                // Mettre à jour le mode de jeu
+                ruleMode = clickedOption;
+                console.log("Mode de jeu changé :", ruleMode);
+
+                // Redémarrer la partie
+                restartGame();
             }
-
-            // Désactiver tous les boutons
-            optionButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Activer le OFF et le ON de l'option cliquée
-            const offButton = document.querySelector(`.opt-btn.off[data-option="${clickedOption}"]`);
-            const onButton = document.querySelector(`.opt-btn.on[data-option="${clickedOption}"]`);
-            offButton.classList.add('active');
-            onButton.classList.add('active');
-            
-            // Mettre à jour le mode de jeu
-            ruleMode = clickedOption;
-            console.log("Mode de jeu changé :", ruleMode);
-
-            // Redémarrer la partie
-            restartGame();
+            else {
+                // Désactiver tous les boutons
+                optionButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Activer le OFF et le ON de l'option cliquée
+                const offButton = document.querySelector(`.opt-btn.off[data-option="${clickedOption}"]`);
+                const onButton = document.querySelector(`.opt-btn.on[data-option="${clickedOption}"]`);
+                offButton.classList.add('active');
+                onButton.classList.add('active');
+                
+                // Mettre à jour le mode de jeu
+                ruleMode = clickedOption;
+                console.log("Mode de jeu changé :", ruleMode);
+            }
         }
     });
 });
@@ -166,6 +182,7 @@ const Arraygrilles=Array.from(grilles);
 // Losque la partie commence, Valider cliqué 
 function getValue() {
     console.log("Bouton Valider cliqué")
+    partieEnCours = true;
     // Récupérer les noms
     var nom1 = document.getElementById("in1").value;
     var nom2 = document.getElementById("in2").value;
@@ -267,14 +284,15 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
 
         for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
 
+        vainqueur = checkgrille(indice_grille)
         // On change la couleur de la grille si elle a été gagnée 
-        if (checkgrille(indice_grille)===1){ //la grille a été gagnée
+        if (vainqueur===1){ //la grille a été gagnée
             for (var n = 0; n < casesjouables.length; n++) {
             let idx = Array.prototype.indexOf.call(cases, casesjouables[n]);
             if (idx !== -1) {setPlayability("case", idx, "playedby1");}
             } 
         }
-        else if (checkgrille(indice_grille)===2){ //la grille a été gagnée
+        else if (vainqueur===2){ //la grille a été gagnée
             for (var n = 0; n < casesjouables.length; n++) {
             let idx = Array.prototype.indexOf.call(cases, casesjouables[n]);
             if (idx !== -1) {setPlayability("case", idx, "playedby2");}
@@ -327,46 +345,71 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
 }
 
 
-function checkgrille(indice){ //g indice de la grille qu'on teste
-    const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
-    var binairejouees1=casesjouees1[indice].join('');
-    var binairejouees2=casesjouees2[indice].join('');
-    var grillegagnée=0;
-    for (var i=0;i<winning.length;i++){
-        if (winning[i].test(binairejouees1)==true){grillegagnée=1}
-        if (winning[i].test(binairejouees2)==true){grillegagnée=2}
+function checkgrille(indice) { // g = indice de la grille qu'on teste
+    const winning = [
+        /^111......$/, /^...111...$/, /^......111$/, /^1..1..1..$/,
+        /^.1..1..1.$/, /^..1..1..1$/, /^1...1...1$/, /^..1.1.1..$/
+    ];
+
+    var binairejouees1 = casesjouees1[indice].join('');
+    var binairejouees2 = casesjouees2[indice].join('');
+    var grillegagnée = 0;
+
+    for (var i = 0; i < winning.length; i++) {
+        if (winning[i].test(binairejouees1) === true) { grillegagnée = 1; }
+        if (winning[i].test(binairejouees2) === true) { grillegagnée = 2; }
     }
-    var enfants=grilles[indice].children;
-    if (grillegagnée==1){
-        setPlayability("grille", indice, "wonby1")
+
+    if (grillegagnée == 1) {
+        console.log("Grille ", indice, " gagnée par le joueur 1")
+        setPlayability("grille", indice, "wonby1");
+
         if (ruleMode === "1") {
-            grilles.forEach(g => {
-            const casesDansGrille = g.querySelectorAll('.case'); // ou g.children si tu es sûr que ce sont uniquement des .case
-            const cible = casesDansGrille[indice];
+            grilles.forEach((g, gi) => {
+                const casesDansGrille = g.querySelectorAll('.case');
+                const cible = casesDansGrille[indice];
 
-            if (cible.getAttribute('data-playable') === 'playable') {
-            cible.setAttribute('data-playable', `playedby${joueuractuel}`);
-            }
-        });
+                if (cible.getAttribute('data-playable') === 'playable') {
+                    cible.setAttribute('data-playable', `playedby${joueuractuel}`);
+                    casesjouees1[gi][indice]=1;
+                }
+                const etatGrille = grilles[gi].getAttribute("data-playable");
+                if (etatGrille !== "wonby1" && etatGrille !== "wonby2" && etatGrille !== "exaequo") {
+                    console.log("on teste la grille", gi)
+                    checkgrille(gi);
+                }
+            });
         }
-    }
-    else if (grillegagnée==2){
-        setPlayability("grille", indice, "wonby2")
+
+    } else if (grillegagnée == 2) {
+        console.log("Grille ", indice, " gagnée par le joueur 2")
+        setPlayability("grille", indice, "wonby2");
+
         if (ruleMode === "1") {
-            grilles.forEach(g => {
-            const casesDansGrille = g.querySelectorAll('.case'); // ou g.children si tu es sûr que ce sont uniquement des .case
-            const cible = casesDansGrille[indice];
+            grilles.forEach((g, gi) => {
+                const casesDansGrille = g.querySelectorAll('.case');
+                const cible = casesDansGrille[indice];
 
-            if (cible.getAttribute('data-playable') === 'playable') {
-            cible.setAttribute('data-playable', `playedby${joueuractuel}`);
-            }
-        });
+                if (cible.getAttribute('data-playable') === 'playable') {
+                    cible.setAttribute('data-playable', `playedby${joueuractuel}`);
+                    casesjouees2[gi][indice]=1;
+                }
+                const etatGrille = grilles[gi].getAttribute("data-playable");
+                if (etatGrille !== "wonby1" && etatGrille !== "wonby2" && etatGrille !== "exaequo") {
+                    console.log("on teste la grille", gi)
+                    checkgrille(gi);
+                }
+            });
         }
-    }
-    else if (joueespargrille[indice]==9&&grillegagnée==0){setPlayability("grille", indice, "exaequo");document.getElementById("commentaire").innerText='Cette grille est perdue'}
 
-    return grillegagnée
+    } else if (joueespargrille[indice] == 9 && grillegagnée == 0) {
+        setPlayability("grille", indice, "exaequo");
+        document.getElementById("commentaire").innerText = 'Cette grille est perdue';
+    }
+
+    return grillegagnée;
 }
+
 
 function getGrillesState() {
     let binWon1 = "";
@@ -400,6 +443,46 @@ function getGrillesState() {
     };
 }
 
+function afficherBoutonRejouer() {
+    const resetBtn = document.getElementById("resetBtn");
+
+    // Change le contenu
+    resetBtn.textContent = "Rejouer";
+
+    // Applique le style spécial
+    resetBtn.classList.add("rejouer");
+
+    // Supprime l’ancien event listener (qui ouvrait la modale)
+    resetBtn.replaceWith(resetBtn.cloneNode(true));
+    const newBtn = document.getElementById("resetBtn");
+
+    // Ajoute un event listener direct → resetGame sans modale
+    newBtn.addEventListener("click", () => {
+        restartGame();  // ta fonction de redémarrage
+        restaurerBoutonReset(); // revient à l’icône
+    });
+}
+
+function restaurerBoutonReset() {
+    const resetBtn = document.getElementById("resetBtn");
+
+    // Remet le SVG original
+    resetBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+        </svg>
+    `;
+
+    // Retire la classe "Rejouer"
+    resetBtn.classList.remove("rejouer");
+
+    // Réattache l’ancien comportement (ouverture modale si besoin)
+    resetBtn.addEventListener("click", () => {
+        document.getElementById("modalOverlay").classList.add("show");
+    });
+}
+
+
 
 function checkwin(){
     const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
@@ -415,20 +498,26 @@ function checkwin(){
     if (gagnant==1){
         console.log("1 a gagné");
         htmlcommentaires.style.display = "block";
-        htmlcommentaires.innerHTML=`Bravo! C'est <span class="player-name player1">${noms[0]}</span> qui a gagné !`;
+        htmlcommentaires.innerHTML=`C\'est <span class="player-name player1">${noms[0]}</span> qui a gagné ! Cliquez sur Rejouer pour commencer une nouvelle partie.`;
         htmlmega.style.display = "none";
+        partieEnCours = false;
+        afficherBoutonRejouer();
         return true}
     else if (gagnant==2){
         console.log("2 a gagné");
         htmlcommentaires.style.display = "block";
-        htmlcommentaires.innerHTML=`Bravo! C'est <span class="player-name player2">${noms[1]}</span> qui a gagné !`;
+        htmlcommentaires.innerHTML=`C\'est <span class="player-name player2">${noms[1]}</span> qui a gagné ! Cliquez sur Rejouer pour commencer une nouvelle partie.`;
         htmlmega.style.display = "none";
+        partieEnCours = false;
+        afficherBoutonRejouer();
         return true}
     else if (gagnant==0 && binairejouables=='000000000'){
         console.log("fin de partie, égalité");
         htmlcommentaires.style.display = "block";
-        htmlcommentaires.innerText='Egalité, personne n\'a gagné ! Cliquez sur `Rejouer` pour commencer une nouvelle partie';
+        htmlcommentaires.innerText=`Egalité, personne n\'a gagné ! Cliquez sur Rejouer pour commencer une nouvelle partie.`;
         htmlmega.style.display = "none";
+        partieEnCours = false;
+        afficherBoutonRejouer();
         return true}
     else {return false}
 }
@@ -500,7 +589,7 @@ function restartGame() {
         htmlcommentaires.innerText = ""; // Effacer le message après le premier coup
         coup(indice);
     });
-    
+    partieEnCours = true;
     console.log("Partie réinitialisée !");
 }
 
