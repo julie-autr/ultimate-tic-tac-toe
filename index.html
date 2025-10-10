@@ -10,7 +10,7 @@
     <div class="top-left-buttons">
         <!-- Bouton Règles (Point d'interrogation) -->
         <div class="rules-toggle" id="rulesToggle">
-            <button id="rulesBtn">
+            <button id="rulesToggleBtn">
                 <svg height="800px" width="800px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
                     viewBox="0 0 512 512"  xml:space="preserve">
                 <g>
@@ -32,8 +32,8 @@
             </button>
         </div>
         <!-- Bouton Options (Engrenage) -->
-        <div class="menu-toggle" id="menuToggle">
-            <button id="settingsBtn">
+        <div class="options-toggle" id="optionsToggle">
+            <button id="optionsToggleBtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.007 7.007 0 00-1.63-.94l-.36-2.54A.5.5 0 0014 2h-4a.5.5 0 00-.5.42l-.36 2.54c-.6.24-1.15.55-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.6 8.84a.5.5 0 00.12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94L2.72 14.52a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.7.22l2.39-.96c.48.39 1.03.7 1.63.94l.36 2.54A.5.5 0 0010 22h4a.5.5 0 00.5-.42l.36-2.54c.6-.24 1.15-.55 1.63-.94l2.39.96c.27.11.56.02.7-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8a3.5 3.5 0 010 7.5z"/>
                 </svg>
@@ -42,7 +42,7 @@
     </div>
 
     <!-- POPUP RÈGLES (toggleable) -->
-    <div class="side-menu-rules" id="sideMenuRules">
+    <div class="rules-side-menu" id="rulesSideMenu">
         <h2>Règles du morpion géant</h2>
         <p>Le plateau est composé de 9 grilles de morpion.</p>
         <h3>L'objectif ?</h3>
@@ -66,15 +66,15 @@
         </ul>
     </div>
 
-    <div class="side-menu-option" id="sideMenuOption">
+    <div class="options-side-menu" id="optionsSideMenu">
         <h3>Options de jeu</h3>
         
         <div class="option-item">
             <h4>Blocage – Choix libre de l’adversaire</h4>
             <p class="option-description">Si la grille est bloquée, l’adversaire peut choisir librement la grille où il veut jouer.</p>
             <div class="option-buttons">
-                <button class="opt-btn off active" data-option="2b" data-state="off">OFF</button>
-                <button class="opt-btn on active" data-option="2b" data-state="on">ON</button>
+                <button class="game-mode-btn off active" data-option="2b" data-state="off">OFF</button>
+                <button class="game-mode-btn on active" data-option="2b" data-state="on">ON</button>
             </div>
         </div>
 
@@ -82,8 +82,8 @@
             <h4>Blocage – Choix par le joueur actuel</h4>
             <p class="option-description">Si la grille désignée est déjà terminée, le joueur en cours choisit où envoyer son adversaire.</p>
             <div class="option-buttons">
-                <button class="opt-btn off" data-option="2a" data-state="off">OFF</button>
-                <button class="opt-btn on" data-option="2a" data-state="on">ON</button>
+                <button class="game-mode-btn off" data-option="2a" data-state="off">OFF</button>
+                <button class="game-mode-btn on" data-option="2a" data-state="on">ON</button>
             </div>
         </div>
 
@@ -91,8 +91,8 @@
             <h4>Contrôle des cases</h4>
             <p class="option-description">Gagner une grille colorie automatiquement toutes les cases qui envoient dans cette grille.</p>
             <div class="option-buttons">
-                <button class="opt-btn off" data-option="1" data-state="off">OFF</button>
-                <button class="opt-btn on" data-option="1" data-state="on">ON</button>
+                <button class="game-mode-btn off" data-option="1" data-state="off">OFF</button>
+                <button class="game-mode-btn on" data-option="1" data-state="on">ON</button>
             </div>
         </div>
         
@@ -100,20 +100,20 @@
 
     <div class="texte">
         <h1>Morpion géant</h1>
-        <div id="toDelete">
+        <div id="gameSetup">
             <label >Nom du joueur 1:</label>
             <input type="text" placeholder="Pierre" id="in1" onkeyup="manage()">
             <label >Nom du joueur 2:</label>
             <input type="text" placeholder="Paul" id="in2" onkeyup="manage()">
             <button type="button" onclick="getValue();" disabled id="bouton">Valider</button>   
         </div>
-        <div id="joueur">
-            <div class="joueur-case" id="joueurActif">
+        <div id="gameInfo">
+            <div class="info-box" id="joueurActif">
                 <p class="joueur1 player"></p>
                 <p class="joueur2 player"></p>
             </div>
-            <div class="joueur-case" id="commentaires"></div>
-            <div class="joueur-case" id="recommencer">
+            <div class="info-box" id="commentaires"></div>
+            <div class="info-box" id="recommencer">
                 <button id="resetBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>

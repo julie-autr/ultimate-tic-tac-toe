@@ -53,7 +53,7 @@ body {
 /* ==========================
    FORMULAIRE NOMS & BOUTON
 ========================== */
-#toDelete {
+#gameSetup {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
     padding: 30px;
@@ -65,7 +65,7 @@ body {
     max-width: 800px;
 }
 
-#toDelete label {
+#gameSetup label {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -73,7 +73,7 @@ body {
     color: #123C69;
 }
 
-#toDelete input {
+#gameSetup input {
     padding: 10px;
     margin: 5px 0;
     border: 2px solid #BAB2B5;
@@ -109,7 +109,7 @@ body {
 /* ==========================
    BLOCS JOUEUR (ACTIF / COMMENTAIRES / RECOMMENCER)
 ========================== */
-#joueur {
+#gameInfo {
     display: none; /* affichage dynamique */
     justify-content: space-between;
     align-items: center;
@@ -396,8 +396,8 @@ body {
     fill: white;
 }
 
-.side-menu-rules,
-.side-menu-option {
+.rules-side-menu,
+.options-side-menu {
     position: fixed;
     top: 0;
     left: -350px;
@@ -411,31 +411,31 @@ body {
     overflow-y: auto;
 }
 
-.side-menu-rules.open,
-.side-menu-option.open {
+.rules-side-menu.open,
+.options-side-menu.open {
     left: 0;
 }
 /* ==========================
    OPTIONS DE JEU / MENU
 ========================== */
 
-.menu-toggle:hover {
+.options-toggle:hover {
     background: #123C69;
 }
 
-.menu-toggle svg {
+.options-toggle svg {
     width: 26px;
     height: 26px;
     fill: #123C69;
     transition: fill 0.3s ease;
 }
 
-.menu-toggle:hover svg {
+.options-toggle:hover svg {
     fill: white;
 }
 
 
-.side-menu-option {
+.options-side-menu {
     position: fixed;
     top: 0;
     left: -350px;
@@ -450,8 +450,8 @@ body {
 }
 
 
-.side-menu-rules h2,
-.side-menu-option h3 {
+.rules-side-menu h2,
+.options-side-menu h3 {
     font-size: 1.5em;
     font-weight: 700;
     text-align: center;
@@ -462,7 +462,7 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-.side-menu-rules h3 {
+.rules-side-menu h3 {
     font-size: 1.05em;
     font-weight: 700;
     color: #123C69;
@@ -472,7 +472,7 @@ body {
     letter-spacing: 0.1px;
 }
 
-.side-menu-rules h3::before {
+.rules-side-menu h3::before {
     content: "";
     position: absolute;
     left: 0;
@@ -522,7 +522,7 @@ body {
     overflow: hidden;
 }
 
-.opt-btn {
+.game-mode-btn {
     padding: 6px 14px;
     font-weight: 600;
     cursor: pointer;
@@ -531,12 +531,12 @@ body {
     background: white;
 }
 
-.opt-btn.off { background: #AC3B61; border-color: #AC3B61; color: white; }
-.opt-btn.on { background: #BAB2B5; border-color: #BAB2B5; color: white; }
-.opt-btn.off.active { background: #BAB2B5; border-color: #BAB2B5; color: white; }
-.opt-btn.on.active { background: #AC3B61; border-color: #AC3B61; color: white; }
+.game-mode-btn.off { background: #AC3B61; border-color: #AC3B61; color: white; }
+.game-mode-btn.on { background: #BAB2B5; border-color: #BAB2B5; color: white; }
+.game-mode-btn.off.active { background: #BAB2B5; border-color: #BAB2B5; color: white; }
+.game-mode-btn.on.active { background: #AC3B61; border-color: #AC3B61; color: white; }
 
-.opt-btn:hover { opacity: 0.8; }
+.game-mode-btn:hover { opacity: 0.8; }
 
 
 /* ==========================
@@ -546,17 +546,17 @@ body {
     .texte { padding: 20px; }
     .texte h1 { font-size: 2em; }
     .texte p { font-size: 0.9em; }
-    #toDelete input { width: 200px; }
-    #joueur { flex-direction: column; gap: 10px; }
-    .side-menu-rules,
-    .side-menu-option {
+    #gameSetup input { width: 200px; }
+    #gameInfo { flex-direction: column; gap: 10px; }
+    .rules-side-menu,
+    .options-side-menu {
         width: 70vw;
         left: -90vw; /* on cache totalement le panneau */
         right: auto; /* on annule le right:-20px */
     }
 
-    .side-menu-rules.open,
-    .side-menu-option.open {
+    .rules-side-menu.open,
+    .options-side-menu.open {
         left: 0; /* on l’affiche bien à l’écran */
     }}
 
