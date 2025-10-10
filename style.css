@@ -312,6 +312,10 @@ body {
 [class^="grille"][data-playable="wonby1"] .case,
 [class^="grille"][data-playable="wonby2"] .case { border-color: transparent !important; }
 
+[class^="grille"][data-playable="exaequo"] {
+  opacity: 0.4; 
+}
+
 [class^="case"][data-playable="playedby1"] { background-color: #80586D; }
 [class^="case"][data-playable="playedby2"] { background-color: #659ABD; }
 
@@ -544,8 +548,17 @@ body {
     .texte p { font-size: 0.9em; }
     #toDelete input { width: 200px; }
     #joueur { flex-direction: column; gap: 10px; }
-    .side-menu-rules { width: 90vw; right: -20px; }
-}
+    .side-menu-rules,
+    .side-menu-option {
+        width: 70vw;
+        left: -90vw; /* on cache totalement le panneau */
+        right: auto; /* on annule le right:-20px */
+    }
+
+    .side-menu-rules.open,
+    .side-menu-option.open {
+        left: 0; /* on l’affiche bien à l’écran */
+    }}
 
 
 /* ==========================

@@ -51,6 +51,15 @@ document.addEventListener('click', (e) => {
 // Gestion des boutons d'options
 const optionButtons = document.querySelectorAll('.opt-btn');
 
+function toggleOption(option){
+    optionButtons.forEach(btn => btn.classList.remove('active'));
+    
+    const offButton = document.querySelector(`.opt-btn.off[data-option="${option}"]`);
+    const onButton = document.querySelector(`.opt-btn.on[data-option="${option}"]`);
+    offButton.classList.add('active');
+    onButton.classList.add('active');
+}
+
 optionButtons.forEach(button => {
     button.addEventListener('click', async (e) => {
         const clickedOption = e.target.getAttribute('data-option');
@@ -66,35 +75,16 @@ optionButtons.forEach(button => {
                     return; // Stoppe ici, rien ne change
                 }
 
-                // Désactiver tous les boutons
-                optionButtons.forEach(btn => btn.classList.remove('active'));
+                toggleOption(clickedOption)
                 
-                // Activer le OFF et le ON de l'option cliquée
-                const offButton = document.querySelector(`.opt-btn.off[data-option="${clickedOption}"]`);
-                const onButton = document.querySelector(`.opt-btn.on[data-option="${clickedOption}"]`);
-                offButton.classList.add('active');
-                onButton.classList.add('active');
-                
-                // Mettre à jour le mode de jeu
-                ruleMode = clickedOption;
-                console.log("Mode de jeu changé :", ruleMode);
+                ruleMode = clickedOption; console.log("Mode de jeu changé :", ruleMode);
 
                 // Redémarrer la partie
                 restartGame();
             }
             else {
-                // Désactiver tous les boutons
-                optionButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Activer le OFF et le ON de l'option cliquée
-                const offButton = document.querySelector(`.opt-btn.off[data-option="${clickedOption}"]`);
-                const onButton = document.querySelector(`.opt-btn.on[data-option="${clickedOption}"]`);
-                offButton.classList.add('active');
-                onButton.classList.add('active');
-                
-                // Mettre à jour le mode de jeu
-                ruleMode = clickedOption;
-                console.log("Mode de jeu changé :", ruleMode);
+                toggleOption(clickedOption)
+                ruleMode = clickedOption; console.log("Mode de jeu changé :", ruleMode);
             }
         }
     });
@@ -179,6 +169,35 @@ var canSelectGrid=1; // pour ne pouvoir utiliser 'griser' en cliquant sur une gr
 const Arraygrilles=Array.from(grilles);
 
 
+// Partie commune : choisir qui commence et préparer le tour
+function startTurn() {
+    let nb = Math.random();
+    if (nb > 0.5) {
+        joueuractuel = 1;
+        setActivePlayer(1);
+        htmlcommentaires.innerHTML = `C'est <span class="player-name player1">${noms[0]}</span> qui commence !`;
+    } else {
+        joueuractuel = 2;
+        setActivePlayer(2);
+        htmlcommentaires.innerHTML = `C'est <span class="player-name player2">${noms[1]}</span> qui commence !`;
+    }
+
+    // Affichage de la grille et des éléments
+    document.querySelector(".megagrille").style.display = "block";
+    void document.querySelector(".megagrille").offsetHeight; // Force reflow
+    document.getElementById("joueur").style.display = "flex";    
+    document.getElementsByClassName("joueur1")[0].innerText = noms[0];
+    document.getElementsByClassName("joueur2")[0].innerText = noms[1];
+
+    chooseGrid((indice) => {
+        htmlcommentaires.innerText = ""; // Effacer message après le premier coup
+        coup(indice);
+    });
+
+    partieEnCours = true;
+}
+
+
 // Losque la partie commence, Valider cliqué 
 function getValue() {
     console.log("Bouton Valider cliqué")
@@ -188,27 +207,7 @@ function getValue() {
     var nom2 = document.getElementById("in2").value;
     console.log(nom1,nom2); noms.push(nom1); noms.push(nom2);
     document.getElementById("toDelete").style.display = "none";     // Choisir qui commence
-    let nb=Math.random();
-    console.log("Nombre random : ", nb)
-    if (nb > 0.5) {
-        htmlcommentaires.innerHTML = `C'est <span class="player-name player1">${noms[0]}</span> qui commence !`;
-        joueuractuel = 1;
-        setActivePlayer(1);
-    } else {
-        htmlcommentaires.innerHTML = `C'est <span class="player-name player2">${noms[1]}</span> qui commence !`;
-        joueuractuel = 2;
-        setActivePlayer(2);
-    }
-    document.getElementById("joueur").innerHTML
-    // Afficher la grille et les autres trucs
-    document.querySelector(".megagrille").style.display = "block";
-    void document.querySelector(".megagrille").offsetHeight;
-
-    document.getElementById("joueur").style.display = "flex";    
-    document.getElementsByClassName("joueur1")[0].innerText=noms[0]; document.getElementsByClassName("joueur2")[0].innerText=noms[1];
-    chooseGrid((indice) => {
-    coup(indice);
-    });
+    startTurn();
 };
 
 
@@ -256,9 +255,6 @@ function coup(g) {
 }
 
 var choisir=0;
-var joueespargrille=[0,0,0,0,0,0,0,0,0]
-var casesjouees1=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
-var casesjouees2=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
 
 function listenercase(event){ //g est l'indice de la grille dans laquelle on joue, et donc l'indice du parent de la case 
     console.log('cliqué');
@@ -273,14 +269,13 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
 
     if (grilleactuelle==indice_grille && target.getAttribute("data-playable") === "playable"){
         console.log("On peut jouer cette case")
-        joueespargrille[indice_grille]+=1;
 
         console.log("Case globale cliquée :", indice_case_global);
         console.log("Case locale cliquée :", indice_case_in_grille);
 
 
-        if (joueuractuel === 1){setPlayability("case", indice_case_global, "playedby1"); casesjouees1[indice_grille][indice_case_in_grille]=1;}
-        else if (joueuractuel === 2){setPlayability("case", indice_case_global, "playedby2"); casesjouees2[indice_grille][indice_case_in_grille]=1;}
+        if (joueuractuel === 1){setPlayability("case", indice_case_global, "playedby1"); }
+        else if (joueuractuel === 2){setPlayability("case", indice_case_global, "playedby2"); }
 
         for (var i=0;i<casesjouables.length;i++){casesjouables[i].removeEventListener('click',listenercase)}
 
@@ -344,70 +339,64 @@ function listenercase(event){ //g est l'indice de la grille dans laquelle on jou
     else console.log("Tu ne peux pas jouer cette case coco")
 }
 
+function joueesParGrille(indice) {
+    const grille = grilles[indice];
+    if (!grille) return 0;
 
-function checkgrille(indice) { // g = indice de la grille qu'on teste
+    // Compte le nombre de cases dont data-playable ≠ "playable"
+    return [...grille.querySelectorAll('.case')]
+        .filter(c => c.dataset.playable !== "playable")
+        .length;
+}
+
+
+function checkgrille(indice) {
+    // Combinaisons gagnantes (chaînes binaires)
     const winning = [
         /^111......$/, /^...111...$/, /^......111$/, /^1..1..1..$/,
         /^.1..1..1.$/, /^..1..1..1$/, /^1...1...1$/, /^..1.1.1..$/
     ];
 
-    var binairejouees1 = casesjouees1[indice].join('');
-    var binairejouees2 = casesjouees2[indice].join('');
-    var grillegagnée = 0;
+    // Sélectionne les 9 cases appartenant à la grille "indice"
+    const grille = grilles[indice];
+    if (!grille) return 0; // Sécurité si la grille n'existe pas
 
-    for (var i = 0; i < winning.length; i++) {
-        if (winning[i].test(binairejouees1) === true) { grillegagnée = 1; }
-        if (winning[i].test(binairejouees2) === true) { grillegagnée = 2; }
+    const casesGrille = grille.querySelectorAll('.case');
+    const binaires = [ "", "" ]; // [joueur1, joueur2]
+    casesGrille.forEach(c => {
+        const val = c.getAttribute("data-playable");
+        binaires[0] += (val === "playedby1" ? "1" : "0");
+        binaires[1] += (val === "playedby2" ? "1" : "0");
+    });
+
+    // Vérifie si un joueur a gagné
+    let grillegagnee = 0;
+    binaires.forEach((b, j) => {
+        if (winning.some(regex => regex.test(b))) grillegagnee = j + 1;
+    });
+    if (grillegagnee === 1 || grillegagnee === 2){
+        console.log(`Grille ${indice} gagnée par le joueur ${grillegagnee}`);
+        setPlayability("grille", indice, `wonby${grillegagnee}`);
+        if (ruleMode === "1") {
+            grilles.forEach((g, gi) => {
+                const cible = g.querySelectorAll('.case')[indice];
+                if (cible.getAttribute('data-playable') === 'playable') {
+                    cible.setAttribute('data-playable', `playedby${joueuractuel}`);
+                }
+                const etatGrille = g.getAttribute("data-playable");
+                if (!["wonby1", "wonby2", "exaequo"].includes(etatGrille)) {
+                    console.log("on teste la grille", gi);
+                    checkgrille(gi);
+                }
+            });
+        }
     }
-
-    if (grillegagnée == 1) {
-        console.log("Grille ", indice, " gagnée par le joueur 1")
-        setPlayability("grille", indice, "wonby1");
-
-        if (ruleMode === "1") {
-            grilles.forEach((g, gi) => {
-                const casesDansGrille = g.querySelectorAll('.case');
-                const cible = casesDansGrille[indice];
-
-                if (cible.getAttribute('data-playable') === 'playable') {
-                    cible.setAttribute('data-playable', `playedby${joueuractuel}`);
-                    casesjouees1[gi][indice]=1;
-                }
-                const etatGrille = grilles[gi].getAttribute("data-playable");
-                if (etatGrille !== "wonby1" && etatGrille !== "wonby2" && etatGrille !== "exaequo") {
-                    console.log("on teste la grille", gi)
-                    checkgrille(gi);
-                }
-            });
-        }
-
-    } else if (grillegagnée == 2) {
-        console.log("Grille ", indice, " gagnée par le joueur 2")
-        setPlayability("grille", indice, "wonby2");
-
-        if (ruleMode === "1") {
-            grilles.forEach((g, gi) => {
-                const casesDansGrille = g.querySelectorAll('.case');
-                const cible = casesDansGrille[indice];
-
-                if (cible.getAttribute('data-playable') === 'playable') {
-                    cible.setAttribute('data-playable', `playedby${joueuractuel}`);
-                    casesjouees2[gi][indice]=1;
-                }
-                const etatGrille = grilles[gi].getAttribute("data-playable");
-                if (etatGrille !== "wonby1" && etatGrille !== "wonby2" && etatGrille !== "exaequo") {
-                    console.log("on teste la grille", gi)
-                    checkgrille(gi);
-                }
-            });
-        }
-
-    } else if (joueespargrille[indice] == 9 && grillegagnée == 0) {
+    else if (joueesParGrille(indice) == 9 && grillegagnée == 0) {
         setPlayability("grille", indice, "exaequo");
-        document.getElementById("commentaire").innerText = 'Cette grille est perdue';
+        console.log("Grille ", indice, " exaequo")
     }
 
-    return grillegagnée;
+    return grillegagnee;
 }
 
 
@@ -487,39 +476,28 @@ function restaurerBoutonReset() {
 function checkwin(){
     const winning=[/^111......$/,/^...111...$/,/^......111$/,/^1..1..1..$/,/^.1..1..1.$/,/^..1..1..1$/,/^1...1...1$/,/^..1.1.1..$/];
     const playability = getGrillesState();
-    var binairegagnees1=playability.joueur1;
-    var binairegagnees2=playability.joueur2;
-    var binairejouables=playability.playable;
+    const { joueur1: binaire1, joueur2: binaire2, playable: jouables } = playability;
     var gagnant=0;
     for (var i=0;i<winning.length;i++){
-        if (winning[i].test(binairegagnees1)==true){gagnant=1}
-        if (winning[i].test(binairegagnees2)==true){gagnant=2}
+        if (winning[i].test(binaire1)==true){gagnant=1}
+        if (winning[i].test(binaire2)==true){gagnant=2}
     }
-    if (gagnant==1){
-        console.log("1 a gagné");
-        htmlcommentaires.style.display = "block";
-        htmlcommentaires.innerHTML=`C\'est <span class="player-name player1">${noms[0]}</span> qui a gagné ! Cliquez sur Rejouer pour commencer une nouvelle partie.`;
-        htmlmega.style.display = "none";
-        partieEnCours = false;
-        afficherBoutonRejouer();
-        return true}
-    else if (gagnant==2){
-        console.log("2 a gagné");
-        htmlcommentaires.style.display = "block";
-        htmlcommentaires.innerHTML=`C\'est <span class="player-name player2">${noms[1]}</span> qui a gagné ! Cliquez sur Rejouer pour commencer une nouvelle partie.`;
-        htmlmega.style.display = "none";
-        partieEnCours = false;
-        afficherBoutonRejouer();
-        return true}
-    else if (gagnant==0 && binairejouables=='000000000'){
+    if (gagnant==0 && jouables!=='000000000'){
+        return false
+    }
+    if (gagnant === 1 || gagnant === 2){
+        console.log(`${gagnant} a gagné`)
+        htmlcommentaires.innerHTML=`C\'est <span class="player-name player${gagnant}">${noms[gagnant-1]}</span> qui a gagné ! Cliquez sur Rejouer pour commencer une nouvelle partie.`;
+}
+    else if (gagnant==0 && jouables=='000000000'){
         console.log("fin de partie, égalité");
-        htmlcommentaires.style.display = "block";
         htmlcommentaires.innerText=`Egalité, personne n\'a gagné ! Cliquez sur Rejouer pour commencer une nouvelle partie.`;
-        htmlmega.style.display = "none";
-        partieEnCours = false;
-        afficherBoutonRejouer();
-        return true}
-    else {return false}
+        }
+    htmlcommentaires.style.display = "block";
+    // htmlmega.style.display = "none";
+    partieEnCours = false;
+    afficherBoutonRejouer();
+    return true
 }
 
 function changercouleurnoms() {
@@ -551,11 +529,6 @@ function restartGame() {
     grilleactuelle = 150;
     canSelectGrid = 1;
     
-    // Réinitialiser les tableaux des coups
-    joueespargrille = [0,0,0,0,0,0,0,0,0];
-    casesjouees1 = Array(9).fill().map(() => Array(9).fill(0));
-    casesjouees2 = Array(9).fill().map(() => Array(9).fill(0));
-    
     // Réinitialiser les grilles et les cases
     grilles.forEach((grille, i) => {
         setPlayability("grille", i, "playable");
@@ -568,30 +541,10 @@ function restartGame() {
     if (htmlcommentaires) {
         htmlcommentaires.innerHTML = "";
     }
-    
-    // Réafficher la grille
-    htmlmega.style.display = "block";
-    
-    // Choisir qui commence
-    let nb = Math.random();
-    if (nb > 0.5) {
-        joueuractuel = 1;
-        setActivePlayer(1);
-        htmlcommentaires.innerHTML = `C'est <span class="player-name player1">${noms[0]}</span> qui commence !`;
-    } else {
-        joueuractuel = 2;
-        setActivePlayer(2);
-        htmlcommentaires.innerHTML = `C'est <span class="player-name player2">${noms[1]}</span> qui commence !`;
-    }
-    
-    // Permettre de choisir une grille pour commencer
-    chooseGrid((indice) => {
-        htmlcommentaires.innerText = ""; // Effacer le message après le premier coup
-        coup(indice);
-    });
-    partieEnCours = true;
+    startTurn()
     console.log("Partie réinitialisée !");
 }
+
 
 function showConfirmModal(message) {
     return new Promise((resolve) => {
